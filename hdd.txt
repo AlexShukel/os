@@ -1,0 +1,6 @@
+@PRM
+test
+@COD
+HALT
+@DAT
+@END
