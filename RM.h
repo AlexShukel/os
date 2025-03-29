@@ -9,21 +9,18 @@
 #include <string>
 
 #include "CPU.h"
+#include "DataExchange.h"
 #include "RAM.h"
-#include "VM.h"
 
 class RM {
+public:
     CPU cpu;
     RAM memory;
+    DataExchange dataExchange;
 
-    VM *alloc_vm();
+    RM();
 
-    void load_program(std::string program);
-
-public:
-    RM() = default;
-
-    void load_programs_from_file(const std::string &path);
+    void load_program_from_file(const std::string &path);
 };
 
 

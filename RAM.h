@@ -6,19 +6,28 @@
 #define RAM_H
 
 #include "shared.h"
+#include "Word.h"
 
 class MemoryBlock {
-    W data[BLOCK_SIZE];
-
 public:
+    Word data[BLOCK_SIZE];
     MemoryBlock() = default;
 };
 
 class RAM {
-    MemoryBlock blocks[RM_RAM_SIZE];
-
 public:
+    MemoryBlock blocks[RM_RAM_SIZE];
     RAM() = default;
+
+    // debug
+    void __print_memory() {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < BLOCK_SIZE; j++) {
+                printf("%.6s ", blocks[i].data[j].word);
+            }
+            printf("\n");
+        }
+    }
 };
 
 

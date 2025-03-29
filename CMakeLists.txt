@@ -12,4 +12,8 @@ add_executable(OS2025 main.cpp
         CPU.cpp
         CPU.h
         RAM.cpp
-        RAM.h)
+        RAM.h
+        DataExchange.cpp
+        DataExchange.h
+        Word.cpp
+        Word.h)

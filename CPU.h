@@ -6,21 +6,22 @@
 #define CPU_H
 
 #include "shared.h"
+#include "Word.h"
 
 class CPU {
 public:
-    W ptr; // Paging table
-    HW pc; // Program counter
-    HW sp; // Stack pointer
-    B c; // Flags
-    B pi; // Program interruptions
-    B si; // Supervisor interruptions
-    B mode; // Mode (0 - user, 1 - supervisor)
-    B ti; // Timer
+    char ptr[5]; // Paging table
+    char pc[4]; // Program counter
+    char sp[4]; // Stack pointer
+    Byte c; // Flags
+    Byte pi; // Program interruptions
+    Byte si; // Supervisor interruptions
+    Byte mode; // Mode (0 - user, 1 - supervisor)
+    Byte ti; // Timer
 
     CPU() = default;
 
-    void exec(W command) {
+    void exec(Word command) {
         // switch
     }
 };

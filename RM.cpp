@@ -6,46 +6,24 @@
 #include <sstream>
 
 #include "RM.h"
+#include "Word.h"
 
-VM *RM::alloc_vm() {
+RM::RM(): cpu(CPU()), memory(RAM()), dataExchange(memory) {}
 
+int getFileSize(const std::string &filename) {
+    std::ifstream file(filename, std::ios::binary | std::ios::ate);
+    if (!file) return 0;
+    return file.tellg();
 }
 
-void RM::load_program(std::string program) {
-    std::string line;
-    std::istringstream stream(program);
+void RM::load_program_from_file(const std::string &path) {
+    dataExchange.sourcePointer = Word(0);
+    dataExchange.destinationPointer = Word(0);
+    dataExchange.byteCount = Word(getFileSize(path));
+    dataExchange.path = path;
+    dataExchange.sourceObject = EXTERNAL;
+    dataExchange.destinationObject = MEMORY;
 
-    while(std::getline(stream, line)) {
-        switch(line) {
-            case "@PRM":
-                break;
-            case "@COD":
-                break;
-            case "@DAT":
-                break;
-        }
-    }
-}
-
-void RM::load_programs_from_file(const std::string &path) {
-    std::ifstream file(path);
-
-    if (!file) {
-        std::cerr << "ERROR: failed to open file " << path << std::endl;
-        exit(1);
-    }
-
-    std::string line;
-    std::string program;
-    while (std::getline(file, line)) {
-        program.append(line + '\n');
-
-        if (line == "@END") {
-            load_program(program);
-            program.clear();
-        }
-    }
-
-    file.close();
+    dataExchange.xchg();
 }
 

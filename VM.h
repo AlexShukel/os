@@ -6,11 +6,12 @@
 #define VM_H
 
 #include "shared.h"
+#include "Word.h"
 
 class VM {
-    HW pc = 0; // Program counter
-    HW sp = 0; // Stack pointer
-    B c = 0; // Flags
+    Word pc = Word(0); // Program counter
+    Word sp = Word(0); // Stack pointer
+    unsigned char c = 0; // Flags
 
 public:
     VM() = default;
