@@ -5,6 +5,8 @@
 #ifndef CPU_H
 #define CPU_H
 
+#include <iostream>
+
 #include "shared.h"
 #include "Word.h"
 

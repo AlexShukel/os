@@ -21,6 +21,8 @@ public:
     explicit Word(const std::string &str);
 
     bool isNumber() const;
+
+    int toInteger() const;
 };
 
 

@@ -27,10 +27,10 @@ public:
     MemoryObject sourceObject;
     MemoryObject destinationObject;
 
-    RAM memory;
+    RAM *memory;
     std::string path;
 
-    explicit DataExchange(RAM &memory);
+    explicit DataExchange(RAM *memory);
 
     void xchg();
 };

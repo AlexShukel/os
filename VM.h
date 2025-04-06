@@ -10,10 +10,10 @@
 
 class VM {
     Word pc = Word(0); // Program counter
-    Word sp = Word(0); // Stack pointer
+    Word sp = Word(255); // Stack pointer
     unsigned char c = 0; // Flags
-
 public:
+
     VM() = default;
 };
 

@@ -8,7 +8,7 @@
 #include <iostream>
 #include <stdexcept>
 
-DataExchange::DataExchange(RAM &memory) {
+DataExchange::DataExchange(RAM *memory) {
     this->memory = memory;
     destinationPointer = Word();
     sourcePointer = Word();
@@ -30,16 +30,18 @@ void DataExchange::xchg() {
             exit(1);
         }
 
+        // Move to the sourcePointer
+        file.seekg(sourcePointer.toInteger(), std::ios::cur);
+
         if (destinationObject == MEMORY) {
             std::string line;
-            int i = 0;
+            int i = destinationPointer.toInteger();
             while (std::getline(file, line)) {
                 if (line.size() != WORD_SIZE) {
                     throw std::runtime_error("ERROR: each line on external storage must contain exactly one word.");
                 }
 
-                memory.blocks[i / BLOCK_SIZE].data[i % BLOCK_SIZE] = Word(line);
-                // printf("%s %.6s %d %d\n", line.c_str(), Word(line).word, i % BLOCK_SIZE, i / BLOCK_SIZE);
+                memory->writeWord(Word(line), i);
                 ++i;
             }
         }

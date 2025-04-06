@@ -7,10 +7,12 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "CPU.h"
 #include "DataExchange.h"
 #include "RAM.h"
+#include "VM.h"
 
 class RM {
 public:
@@ -20,7 +22,8 @@ public:
 
     RM();
 
-    void load_program_from_file(const std::string &path);
+    void loadAndRunProgram(const std::string &path);
+
 };
 
 

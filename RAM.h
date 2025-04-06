@@ -5,6 +5,8 @@
 #ifndef RAM_H
 #define RAM_H
 
+#include <iostream>
+
 #include "shared.h"
 #include "Word.h"
 
@@ -15,12 +17,18 @@ public:
 };
 
 class RAM {
-public:
+    bool free[RM_RAM_SIZE] = {};
     MemoryBlock blocks[RM_RAM_SIZE];
-    RAM() = default;
+
+public:
+    RAM();
+
+    int pickRandomBlock();
+
+    void writeWord(Word word, int pointer);
 
     // debug
-    void __print_memory() {
+    void __print() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < BLOCK_SIZE; j++) {
                 printf("%.6s ", blocks[i].data[j].word);

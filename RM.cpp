@@ -8,7 +8,7 @@
 #include "RM.h"
 #include "Word.h"
 
-RM::RM(): cpu(CPU()), memory(RAM()), dataExchange(memory) {}
+RM::RM(): cpu(), dataExchange(&memory) {}
 
 int getFileSize(const std::string &filename) {
     std::ifstream file(filename, std::ios::binary | std::ios::ate);
@@ -16,14 +16,19 @@ int getFileSize(const std::string &filename) {
     return file.tellg();
 }
 
-void RM::load_program_from_file(const std::string &path) {
+void RM::loadAndRunProgram(const std::string &path) {
+    Word destinationPointer(0);
+
     dataExchange.sourcePointer = Word(0);
-    dataExchange.destinationPointer = Word(0);
+    dataExchange.destinationPointer = Word(destinationPointer);
     dataExchange.byteCount = Word(getFileSize(path));
     dataExchange.path = path;
     dataExchange.sourceObject = EXTERNAL;
     dataExchange.destinationObject = MEMORY;
 
     dataExchange.xchg();
+
+    memory.__print();
+    // TODO: create VM
 }
 

@@ -30,3 +30,15 @@ bool Word::isNumber() const {
     return true;
 }
 
+int Word::toInteger() const {
+    if (!isNumber()) {
+        throw std::invalid_argument("Invalid number");
+    }
+
+    std::stringstream ss;
+    ss << std::hex << std::string(word, WORD_SIZE);
+    int n;
+    ss >> n;
+    return n;
+}
+
