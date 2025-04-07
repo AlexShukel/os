@@ -2,8 +2,8 @@
 // Created by alexs on 3/15/2025.
 //
 
-#ifndef RM_H
-#define RM_H
+#ifndef REAL_MACHINE_H
+#define REAL_MACHINE_H
 
 #include <iostream>
 #include <string>
@@ -12,15 +12,15 @@
 #include "CPU.h"
 #include "DataExchange.h"
 #include "RAM.h"
-#include "VM.h"
+#include "VirtualMachine.h"
 
-class RM {
+class RealMachine {
 public:
     CPU cpu;
     RAM memory;
     DataExchange dataExchange;
 
-    RM();
+    RealMachine();
 
     void loadAndRunProgram(const std::string &path);
 

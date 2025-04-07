@@ -5,10 +5,10 @@
 #include <fstream>
 #include <sstream>
 
-#include "RM.h"
+#include "RealMachine.h"
 #include "Word.h"
 
-RM::RM(): cpu(), dataExchange(&memory) {}
+RealMachine::RealMachine(): cpu(), dataExchange(&memory) {}
 
 int getFileSize(const std::string &filename) {
     std::ifstream file(filename, std::ios::binary | std::ios::ate);
@@ -16,7 +16,7 @@ int getFileSize(const std::string &filename) {
     return file.tellg();
 }
 
-void RM::loadAndRunProgram(const std::string &path) {
+void RealMachine::loadAndRunProgram(const std::string &path) {
     Word destinationPointer(0);
 
     dataExchange.sourcePointer = Word(0);
