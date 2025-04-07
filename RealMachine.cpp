@@ -16,13 +16,13 @@ int getFileSize(const std::string &filename) {
     return file.tellg();
 }
 
-void RealMachine::loadAndRunProgram(const std::string &path) {
+void RealMachine::loadAndRunProgram(const std::string &fileName) {
     Word destinationPointer(0);
 
     dataExchange.sourcePointer = Word(0);
     dataExchange.destinationPointer = Word(destinationPointer);
-    dataExchange.byteCount = Word(getFileSize(path));
-    dataExchange.path = path;
+    dataExchange.byteCount = Word(getFileSize(fileName));
+    dataExchange.path = fileName;
     dataExchange.sourceObject = EXTERNAL;
     dataExchange.destinationObject = MEMORY;
 
