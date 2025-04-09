@@ -22,12 +22,19 @@ class RAM {
 
 public:
     RAM();
+    
+    int initPageTable();
+    
+    void writeWord(Word word, int block, int index);
+    
+    void printBlock(int block);
+
+    MemoryBlock& getPageTable(int index);
+
+private:
+    int pageTableCount = 0;
 
     int pickRandomBlockIndex();
-
-    void writeWord(Word word, int block, int index);
-
-    void printBlock(int block);
 };
 
 

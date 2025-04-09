@@ -10,31 +10,25 @@
 
 RealMachine::RealMachine(): cpu(), dataExchange(&memory) {}
 
-MemoryBlock RealMachine::initPageTable() {
-    MemoryBlock pageTable;
 
-    for (int i = 0; i < BLOCK_SIZE; ++i) {
-        int randomBlock = memory.pickRandomBlockIndex();
-        pageTable.data[i] = Word(randomBlock);
-    }
-
-    return pageTable;
-}
 
 void RealMachine::loadAndRunProgram(const std::string &fileName) {
-    MemoryBlock pageTable = initPageTable();
+    int pageTableIndex = memory.initPageTable();
     
     dataExchange.path = fileName;
     dataExchange.sourceObject = EXTERNAL;
     dataExchange.destinationObject = MEMORY;
-    dataExchange.pageTable = pageTable;
+    dataExchange.pageTableIndex = pageTableIndex;
 
     dataExchange.xchg();
 
+    MemoryBlock& newProcessPageTable = memory.getPageTable(pageTableIndex);
     // print code segment
-    memory.printBlock(pageTable.data[CODE_SEGMENT_START_BLOCK].toInteger());
+    memory.printBlock(newProcessPageTable.data[CODE_SEGMENT_START_BLOCK].toInteger());
     // print data segment
-    memory.printBlock(pageTable.data[DATA_SEGMENT_START_BLOCK].toInteger()); 
+    memory.printBlock(newProcessPageTable.data[DATA_SEGMENT_START_BLOCK].toInteger()); 
+    // print page table from OS memory
+    memory.printBlock(OS_MEMORY_START_BLOCK + pageTableIndex - 1);
 
     // TODO: create VM
 }

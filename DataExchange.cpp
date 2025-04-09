@@ -42,6 +42,8 @@ void DataExchange::xchg() {
         }
 
         if (destinationObject == MEMORY) {
+            MemoryBlock& pageTable = memory->getPageTable(pageTableIndex);
+
             std::string line = readLine(hdd);
             while (!line.empty()) {
                 while (line != "@FILE0") {
