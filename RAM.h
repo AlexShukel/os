@@ -22,20 +22,19 @@ class RAM {
 
 public:
     RAM();
+    
+    int initPageTable();
+    
+    void writeWord(Word word, int block, int index);
+    
+    void printBlock(int block);
 
-    int pickRandomBlock();
+    MemoryBlock& getPageTable(int index);
 
-    void writeWord(Word word, int pointer);
+private:
+    int pageTableCount = 0;
 
-    // debug
-    void __print() {
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < BLOCK_SIZE; j++) {
-                printf("%.6s ", blocks[i].data[j].word);
-            }
-            printf("\n");
-        }
-    }
+    int pickRandomBlockIndex();
 };
 
 

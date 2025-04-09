@@ -41,31 +41,60 @@ void DataExchange::xchg() {
             exit(1);
         }
 
-        // Move to the sourcePointer
-        hdd.seekg(sourcePointer.toInteger(), std::ios::cur);
-
         if (destinationObject == MEMORY) {
+            MemoryBlock& pageTable = memory->getPageTable(pageTableIndex);
+
             std::string line = readLine(hdd);
-            int i = destinationPointer.toInteger();
             while (!line.empty()) {
                 while (line != "@FILE0") {
                     line = readLine(hdd);
                 }
                 
                 line = readLine(hdd);
-                std::cout << "File name: " << line << std::endl;
                 if (line != path)
                     continue;
+                
+                line = readLine(hdd);
+                if (line != "@CODE0") {
+                    throw std::runtime_error("ERROR: no @CODE0 in " + path);
+                }
+                line = readLine(hdd);
 
-                while (line != "@END00") {
+                int currentWordIndex = 0;
+                int currentBlock = CODE_SEGMENT_START_BLOCK;
+                while (line != "@DATA0") {
+                    if (line.size() != WORD_SIZE) {
+                        throw std::runtime_error("ERROR: each line on external storage must contain exactly one word.");
+                    }
+
+                    memory->writeWord(Word(line), pageTable.data[currentBlock].toInteger(), currentWordIndex);
+                    ++currentWordIndex;
+
+                    if (currentWordIndex >= BLOCK_SIZE - 1) {
+                        currentWordIndex = 0;
+                        ++currentBlock;
+                    }
+
                     line = readLine(hdd);
-
+                }
+                line = readLine(hdd);
+                
+                currentWordIndex = 0;
+                currentBlock = DATA_SEGMENT_START_BLOCK;
+                while (line != "@END00") {
                     if (line.size() != WORD_SIZE) {
                         throw std::runtime_error("ERROR: each line on external storage must contain exactly one word.");
                     }
     
-                    memory->writeWord(Word(line), i);
-                    ++i;
+                    memory->writeWord(Word(line), pageTable.data[currentBlock].toInteger(), currentWordIndex);
+                    ++currentWordIndex;
+
+                    if (currentWordIndex >= BLOCK_SIZE - 1) {
+                        currentWordIndex = 0;
+                        ++currentBlock;
+                    }
+
+                    line = readLine(hdd);
                 }
                 break;
             }

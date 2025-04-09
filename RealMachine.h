@@ -23,7 +23,8 @@ public:
     RealMachine();
 
     void loadAndRunProgram(const std::string &fileName);
-
+private:
+    MemoryBlock initPageTable();
 };
 
 

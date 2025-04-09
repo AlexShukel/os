@@ -10,25 +10,26 @@
 
 RealMachine::RealMachine(): cpu(), dataExchange(&memory) {}
 
-int getFileSize(const std::string &filename) {
-    std::ifstream file(filename, std::ios::binary | std::ios::ate);
-    if (!file) return 0;
-    return file.tellg();
-}
+
 
 void RealMachine::loadAndRunProgram(const std::string &fileName) {
-    Word destinationPointer(0);
-
-    dataExchange.sourcePointer = Word(0);
-    dataExchange.destinationPointer = Word(destinationPointer);
-    dataExchange.byteCount = Word(getFileSize(fileName));
+    int pageTableIndex = memory.initPageTable();
+    
     dataExchange.path = fileName;
     dataExchange.sourceObject = EXTERNAL;
     dataExchange.destinationObject = MEMORY;
+    dataExchange.pageTableIndex = pageTableIndex;
 
     dataExchange.xchg();
 
-    memory.__print();
+    MemoryBlock& newProcessPageTable = memory.getPageTable(pageTableIndex);
+    // print code segment
+    memory.printBlock(newProcessPageTable.data[CODE_SEGMENT_START_BLOCK].toInteger());
+    // print data segment
+    memory.printBlock(newProcessPageTable.data[DATA_SEGMENT_START_BLOCK].toInteger()); 
+    // print page table from OS memory
+    memory.printBlock(OS_MEMORY_START_BLOCK + pageTableIndex - 1);
+
     // TODO: create VM
 }
 
