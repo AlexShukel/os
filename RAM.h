@@ -25,11 +25,11 @@ public:
     
     int initPageTable();
     
-    void writeWord(Word word, int block, int index);
+    void writeWord(const Word& word, const int& block, const int& index);
     
-    void printBlock(int block);
+    void printBlock(const int& block);
 
-    MemoryBlock& getPageTable(int index);
+    MemoryBlock& getPageTable(const int& index);
 
 private:
     int pageTableCount = 0;

@@ -34,12 +34,12 @@ int RAM::pickRandomBlockIndex() {
     return freeIndices[dist(rng)];
 }
 
-void RAM::writeWord(Word word, int block, int index) {
+void RAM::writeWord(const Word& word, const int& block, const int& index) {
     free[block] = false;
     blocks[block].data[index] = word;
 }
 
-void RAM::printBlock(int block) {
+void RAM::printBlock(const int& block) {
     for (int i = 0; i < BLOCK_SIZE; i++) {
         printf("%.6s ", blocks[block].data[i].word);
     }
@@ -59,6 +59,6 @@ int RAM::initPageTable() {
     return pageTableIndex;
 }
 
-MemoryBlock& RAM::getPageTable(int index) {
+MemoryBlock& RAM::getPageTable(const int& index) {
     return blocks[OS_MEMORY_START_BLOCK + index - 1];
 }
