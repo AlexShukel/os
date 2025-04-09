@@ -14,11 +14,21 @@
 #include "RAM.h"
 #include "VirtualMachine.h"
 
+class Process {
+    public:
+        int pid;
+        int pageTableAddress;
+        VirtualMachine virtualMachine;
+    
+        Process(const int& pid, const int& pageTableAddress, const VirtualMachine& virtualMachine);
+    };
+
 class RealMachine {
 public:
     CPU cpu;
     RAM memory;
     DataExchange dataExchange;
+    std::vector<Process> createdProcesses;
 
     RealMachine();
 
@@ -26,6 +36,5 @@ public:
 private:
     MemoryBlock initPageTable();
 };
-
 
 #endif //RM_H

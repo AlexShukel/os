@@ -8,9 +8,9 @@
 #include "RealMachine.h"
 #include "Word.h"
 
-RealMachine::RealMachine(): cpu(), dataExchange(&memory) {}
+RealMachine::RealMachine(): cpu(), dataExchange(&memory), createdProcesses(std::vector<Process>()) {}
 
-
+Process::Process(const int& pid, const int& pageTableAddress, const VirtualMachine& virtualMachine): pid(pid), pageTableAddress(pageTableAddress), virtualMachine(virtualMachine) {}
 
 void RealMachine::loadAndRunProgram(const std::string &fileName) {
     int pageTableIndex = memory.initPageTable();
@@ -31,5 +31,7 @@ void RealMachine::loadAndRunProgram(const std::string &fileName) {
     memory.printBlock(OS_MEMORY_START_BLOCK + pageTableIndex - 1);
 
     // TODO: create VM
+    Process newProcess(createdProcesses.size(), pageTableIndex, VirtualMachine());
+    createdProcesses.push_back(newProcess);
 }
 
