@@ -17,6 +17,17 @@ DataExchange::DataExchange(RAM *memory) {
     byteCount = Word();
 }
 
+std::string readLine(std::ifstream& file) {
+    std::string line = "";
+    std::getline(file, line);
+
+    if (!line.empty() && line.back() == '\r') {
+        line.pop_back();
+    }
+
+    return line;
+}
+
 void DataExchange::xchg() {
     if (destinationObject == EXTERNAL) {
         throw std::runtime_error("DataExchange::xchg() called with dt set to EXTERNAL. Writing in external storage is not supported.");
@@ -34,19 +45,20 @@ void DataExchange::xchg() {
         hdd.seekg(sourcePointer.toInteger(), std::ios::cur);
 
         if (destinationObject == MEMORY) {
-            std::string line;
+            std::string line = readLine(hdd);
             int i = destinationPointer.toInteger();
-            while (std::getline(hdd, line)) {
+            while (!line.empty()) {
                 while (line != "@FILE0") {
-                    std::getline(hdd, line);
+                    line = readLine(hdd);
                 }
-
-                std::getline(hdd, line);
+                
+                line = readLine(hdd);
+                std::cout << "File name: " << line << std::endl;
                 if (line != path)
                     continue;
 
                 while (line != "@END00") {
-                    std::getline(hdd, line);
+                    line = readLine(hdd);
 
                     if (line.size() != WORD_SIZE) {
                         throw std::runtime_error("ERROR: each line on external storage must contain exactly one word.");
