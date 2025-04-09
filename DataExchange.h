@@ -26,6 +26,7 @@ public:
     Word byteCount;
     MemoryObject sourceObject;
     MemoryObject destinationObject;
+    MemoryBlock pageTable;
 
     RAM *memory;
     std::string path;

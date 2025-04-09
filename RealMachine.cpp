@@ -23,19 +23,21 @@ MemoryBlock RealMachine::initPageTable() {
 
 void RealMachine::loadAndRunProgram(const std::string &fileName) {
     MemoryBlock pageTable = initPageTable();
-
-    Word destinationPointer(0);
-
+    
     dataExchange.sourcePointer = Word(0);
-    dataExchange.destinationPointer = Word(destinationPointer);
     dataExchange.byteCount = Word(0); // TODO: do something with this
     dataExchange.path = fileName;
     dataExchange.sourceObject = EXTERNAL;
     dataExchange.destinationObject = MEMORY;
+    dataExchange.pageTable = pageTable;
 
     dataExchange.xchg();
 
-    memory.__print();
+    // print code segment
+    memory.printBlock(pageTable.data[CODE_SEGMENT_START_BLOCK].toInteger());
+    // print data segment
+    memory.printBlock(pageTable.data[DATA_SEGMENT_START_BLOCK].toInteger()); 
+
     // TODO: create VM
 }
 

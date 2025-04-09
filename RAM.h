@@ -25,17 +25,9 @@ public:
 
     int pickRandomBlockIndex();
 
-    void writeWord(Word word, int pointer);
+    void writeWord(Word word, int block, int index);
 
-    // debug
-    void __print() {
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < BLOCK_SIZE; j++) {
-                printf("%.6s ", blocks[i].data[j].word);
-            }
-            printf("\n");
-        }
-    }
+    void printBlock(int block);
 };
 
 

@@ -34,8 +34,14 @@ int RAM::pickRandomBlockIndex() {
     return freeIndices[dist(rng)];
 }
 
-void RAM::writeWord(Word word, int pointer) {
-    free[pointer / BLOCK_SIZE] = false;
-    blocks[pointer / BLOCK_SIZE].data[pointer % BLOCK_SIZE] = word;
+void RAM::writeWord(Word word, int block, int index) {
+    free[block] = false;
+    blocks[block].data[index] = word;
 }
 
+void RAM::printBlock(int block) {
+    for (int i = 0; i < BLOCK_SIZE; i++) {
+        printf("%.6s ", blocks[block].data[i].word);
+    }
+    printf("\n");
+}

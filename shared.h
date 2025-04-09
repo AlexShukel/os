@@ -11,6 +11,10 @@
 #define BLOCK_SIZE 256 // 256 words in a block
 #define WORD_SIZE 6 // 6 bytes in a word
 
+// VM memory
+#define CODE_SEGMENT_START_BLOCK 0
+#define DATA_SEGMENT_START_BLOCK 120
+
 using Byte = char;
 
 #endif //SHARED_H
