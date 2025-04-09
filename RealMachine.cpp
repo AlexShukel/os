@@ -10,18 +10,12 @@
 
 RealMachine::RealMachine(): cpu(), dataExchange(&memory) {}
 
-int getFileSize(const std::string &filename) {
-    std::ifstream file(filename, std::ios::binary | std::ios::ate);
-    if (!file) return 0;
-    return file.tellg();
-}
-
 void RealMachine::loadAndRunProgram(const std::string &fileName) {
     Word destinationPointer(0);
 
     dataExchange.sourcePointer = Word(0);
     dataExchange.destinationPointer = Word(destinationPointer);
-    dataExchange.byteCount = Word(getFileSize(fileName));
+    dataExchange.byteCount = Word(0); // TODO: do something with this
     dataExchange.path = fileName;
     dataExchange.sourceObject = EXTERNAL;
     dataExchange.destinationObject = MEMORY;
