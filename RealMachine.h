@@ -14,15 +14,6 @@
 #include "RAM.h"
 #include "VirtualMachine.h"
 
-class Process {
-    public:
-        int pid;
-        int pageTableAddress;
-        VirtualMachine virtualMachine;
-    
-        Process(const int& pid, const int& pageTableAddress, const VirtualMachine& virtualMachine);
-    };
-
 class RealMachine {
 public:
     CPU cpu;
@@ -33,8 +24,8 @@ public:
     RealMachine();
 
     void loadAndRunProgram(const std::string &fileName);
-private:
-    MemoryBlock initPageTable();
+
+    void updateProcesses();
 };
 
 #endif //RM_H

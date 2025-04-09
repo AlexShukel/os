@@ -10,8 +10,6 @@
 
 RealMachine::RealMachine(): cpu(), dataExchange(&memory), createdProcesses(std::vector<Process>()) {}
 
-Process::Process(const int& pid, const int& pageTableAddress, const VirtualMachine& virtualMachine): pid(pid), pageTableAddress(pageTableAddress), virtualMachine(virtualMachine) {}
-
 void RealMachine::loadAndRunProgram(const std::string &fileName) {
     int pageTableIndex = memory.initPageTable();
     
@@ -34,3 +32,8 @@ void RealMachine::loadAndRunProgram(const std::string &fileName) {
     createdProcesses.push_back(newProcess);
 }
 
+void RealMachine::updateProcesses() {
+    for (Process process : createdProcesses) {
+        process.update();
+    }
+}

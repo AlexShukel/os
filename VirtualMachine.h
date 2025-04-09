@@ -15,8 +15,18 @@ class VirtualMachine {
 public:
 
     VirtualMachine() = default;
+
+    void step();
 };
 
+class Process {
+public:
+    int pid;
+    int pageTableAddress;
+    VirtualMachine virtualMachine;
 
+    Process(const int& pid, const int& pageTableAddress, const VirtualMachine& virtualMachine);
+    void update();
+};
 
 #endif //VM_H
