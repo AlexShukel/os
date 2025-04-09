@@ -24,8 +24,6 @@ MemoryBlock RealMachine::initPageTable() {
 void RealMachine::loadAndRunProgram(const std::string &fileName) {
     MemoryBlock pageTable = initPageTable();
     
-    dataExchange.sourcePointer = Word(0);
-    dataExchange.byteCount = Word(0); // TODO: do something with this
     dataExchange.path = fileName;
     dataExchange.sourceObject = EXTERNAL;
     dataExchange.destinationObject = MEMORY;
