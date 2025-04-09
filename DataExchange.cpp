@@ -68,7 +68,7 @@ void DataExchange::xchg() {
                     memory->writeWord(Word(line), pageTable.data[currentBlock].toInteger(), currentWordIndex);
                     ++currentWordIndex;
 
-                    if (currentWordIndex >= 255) {
+                    if (currentWordIndex >= BLOCK_SIZE - 1) {
                         currentWordIndex = 0;
                         ++currentBlock;
                     }
@@ -87,7 +87,7 @@ void DataExchange::xchg() {
                     memory->writeWord(Word(line), pageTable.data[currentBlock].toInteger(), currentWordIndex);
                     ++currentWordIndex;
 
-                    if (currentWordIndex >= 255) {
+                    if (currentWordIndex >= BLOCK_SIZE - 1) {
                         currentWordIndex = 0;
                         ++currentBlock;
                     }
