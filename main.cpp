@@ -1,7 +1,7 @@
 #include <sstream>
 #include <vector>
 
-#include "RM.h"
+#include "RealMachine.h"
 
 void printHelp() {
     std::cout << "Available commands:\n\n";
@@ -23,7 +23,7 @@ void printHelp() {
 
 int main() {
     std::string line;
-    RM rm{};
+    RealMachine realMachine{};
 
     while (true) {
         // get the input
@@ -53,7 +53,7 @@ int main() {
 
             if (command == "run") {
                 std::string path = args[0];
-                rm.loadAndRunProgram(path);
+                realMachine.loadAndRunProgram(path);
             }
 
             if (command == "debug") {

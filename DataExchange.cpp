@@ -17,36 +17,61 @@ DataExchange::DataExchange(RAM *memory) {
     byteCount = Word();
 }
 
+std::string readLine(std::ifstream& file) {
+    std::string line = "";
+    std::getline(file, line);
+
+    if (!line.empty() && line.back() == '\r') {
+        line.pop_back();
+    }
+
+    return line;
+}
+
 void DataExchange::xchg() {
     if (destinationObject == EXTERNAL) {
         throw std::runtime_error("DataExchange::xchg() called with dt set to EXTERNAL. Writing in external storage is not supported.");
     }
 
     if (sourceObject == EXTERNAL) {
-        std::ifstream file(path);
+        std::ifstream hdd("hdd.txt");
 
-        if (!file) {
-            std::cerr << "ERROR: failed to open file " << path << std::endl;
+        if (!hdd) {
+            std::cerr << "ERROR: failed to open hdd.txt" << std::endl;
             exit(1);
         }
 
         // Move to the sourcePointer
-        file.seekg(sourcePointer.toInteger(), std::ios::cur);
+        hdd.seekg(sourcePointer.toInteger(), std::ios::cur);
 
         if (destinationObject == MEMORY) {
-            std::string line;
+            std::string line = readLine(hdd);
             int i = destinationPointer.toInteger();
-            while (std::getline(file, line)) {
-                if (line.size() != WORD_SIZE) {
-                    throw std::runtime_error("ERROR: each line on external storage must contain exactly one word.");
+            while (!line.empty()) {
+                while (line != "@FILE0") {
+                    line = readLine(hdd);
                 }
+                
+                line = readLine(hdd);
+                std::cout << "File name: " << line << std::endl;
+                if (line != path)
+                    continue;
 
-                memory->writeWord(Word(line), i);
-                ++i;
+                while (line != "@END00") {
+                    line = readLine(hdd);
+
+                    if (line.size() != WORD_SIZE) {
+                        throw std::runtime_error("ERROR: each line on external storage must contain exactly one word.");
+                    }
+    
+                    memory->writeWord(Word(line), i);
+                    ++i;
+                }
+                break;
             }
         }
 
-        file.close();
+        hdd.close();
     }
 }
 
