@@ -10,7 +10,20 @@
 
 RealMachine::RealMachine(): cpu(), dataExchange(&memory) {}
 
+MemoryBlock RealMachine::initPageTable() {
+    MemoryBlock pageTable;
+
+    for (int i = 0; i < BLOCK_SIZE; ++i) {
+        int randomBlock = memory.pickRandomBlockIndex();
+        pageTable.data[i] = Word(randomBlock);
+    }
+
+    return pageTable;
+}
+
 void RealMachine::loadAndRunProgram(const std::string &fileName) {
+    MemoryBlock pageTable = initPageTable();
+
     Word destinationPointer(0);
 
     dataExchange.sourcePointer = Word(0);

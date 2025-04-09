@@ -15,10 +15,10 @@ RAM::RAM() {
     }
 }
 
-int RAM::pickRandomBlock() {
+int RAM::pickRandomBlockIndex() {
     std::vector<int> freeIndices;
 
-    for (bool &i : free) {
+    for (int i = 0; i < RM_RAM_SIZE; ++i) {
         if (free[i]) {
             freeIndices.push_back(i);
         }

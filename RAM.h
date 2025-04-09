@@ -23,7 +23,7 @@ class RAM {
 public:
     RAM();
 
-    int pickRandomBlock();
+    int pickRandomBlockIndex();
 
     void writeWord(Word word, int pointer);
 
