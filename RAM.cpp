@@ -60,5 +60,9 @@ int RAM::initPageTable() {
 }
 
 MemoryBlock& RAM::getPageTable(const int& index) {
-    return blocks[OS_MEMORY_START_BLOCK + index - 1];
+    return getBlock(OS_MEMORY_START_BLOCK + index - 1);
+}
+
+MemoryBlock& RAM::getBlock(const int address) {
+    return blocks[address];
 }

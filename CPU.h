@@ -23,9 +23,7 @@ public:
 
     CPU() = default;
 
-    void exec(Word command) {
-        // switch
-    }
+    void exec(const Word& command);
 };
 
 

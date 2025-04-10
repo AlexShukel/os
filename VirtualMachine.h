@@ -9,10 +9,10 @@
 #include "Word.h"
 
 class VirtualMachine {
+public:
     Word pc = Word(0); // Program counter
     Word sp = Word(255); // Stack pointer
     unsigned char c = 0; // Flags
-public:
 
     VirtualMachine() = default;
 
@@ -26,7 +26,6 @@ public:
     VirtualMachine virtualMachine;
 
     Process(const int& pid, const int& pageTableAddress, const VirtualMachine& virtualMachine);
-    void update();
 };
 
 #endif //VM_H

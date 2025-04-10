@@ -3,3 +3,7 @@
 //
 
 #include "CPU.h"
+
+void CPU::exec(const Word& command) {
+    std::cout << command.word << std::endl;
+}

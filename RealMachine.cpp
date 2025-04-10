@@ -30,10 +30,18 @@ void RealMachine::loadAndRunProgram(const std::string &fileName) {
 
     Process newProcess(createdProcesses.size(), pageTableIndex, VirtualMachine());
     createdProcesses.push_back(newProcess);
+
+    updateProcesses();
 }
 
 void RealMachine::updateProcesses() {
-    for (Process process : createdProcesses) {
-        process.update();
+    MemoryBlock& pageTable = memory.getPageTable(createdProcesses[0].pageTableAddress);
+    Word codeSegmentAddress = pageTable.data[0];
+    MemoryBlock& codeSegment = memory.getBlock(codeSegmentAddress.toInteger());
+
+    for (int i = 0; i < 5; ++i) {
+        Word instruction = codeSegment.data[createdProcesses[0].virtualMachine.pc.toInteger()];    
+        cpu.exec(instruction);
+        createdProcesses[0].virtualMachine.step();
     }
 }

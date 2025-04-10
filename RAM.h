@@ -31,6 +31,8 @@ public:
 
     MemoryBlock& getPageTable(const int& index);
 
+    MemoryBlock& getBlock(const int address);
+
 private:
     int pageTableCount = 0;
 
