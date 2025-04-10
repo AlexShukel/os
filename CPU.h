@@ -12,7 +12,7 @@
 
 class CPU {
 public:
-    char ptr[5]; // Paging table
+    Word ptr; // Paging table
     char pc[4]; // Program counter
     char sp[4]; // Stack pointer
     Byte c; // Flags
