@@ -17,7 +17,7 @@
 
 // Virtual machine memory
 #define CODE_SEGMENT_START_BLOCK 0
-#define DATA_SEGMENT_START_BLOCK 120
+#define DATA_SEGMENT_START_BLOCK 16
 
 using Byte = char;
 
