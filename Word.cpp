@@ -85,3 +85,9 @@ Word Word::operator+(const Word& other) const {
 
     return Word(toInteger() + other.toInteger());
 }
+
+std::ostream& operator<<(std::ostream& os, const Word& word) {
+    for (int i = 0; i < 6; ++i)
+        os << word.word[i];
+    return os;
+}

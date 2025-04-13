@@ -43,6 +43,8 @@ int CPU::exec(VirtualMachine *vm) {
         vm->memory->writeWord(target, address.toInteger());
     } else if (command.equals("GETD00")) {
     } else if (command.equals("PRTW00")) {
+        Word& arg = vm->popFromStack();
+        std::cout << arg << std::endl;
     } else if (command.equals("PRTS00")) {
     } else if (command.equals("HALT00")) {
         return -1;
