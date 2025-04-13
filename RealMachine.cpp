@@ -44,12 +44,14 @@ void RealMachine::debugProgram(VirtualMachine& virtualMachine) {
         std::cout << "===============" << std::endl;
         std::cout << "Available commands:" << std::endl;
         std::cout << "'next' - perform next instruction" << std::endl;
-        std::cout << "'block <block_number>' - print virtual machine block\n\n";
+        std::cout << "'block <block_number>' - print virtual machine block" << std::endl;
+        std::cout << "'rmblock <block_number>' - print real machine block\n\n";
         std::cout << "Next instruction: " << virtualMachine.memory->readWord(virtualMachine.pc.toInteger()) << std::endl;
         std::cout << "Enter command: ";
         std::getline(std::cin, command);
 
         std::string blockCommand = "block";
+        std::string rmBlockCommand = "rmblock";
         
         if (command == "next") {
             commandResult = cpu.exec(virtualMachine);
@@ -65,6 +67,21 @@ void RealMachine::debugProgram(VirtualMachine& virtualMachine) {
             catch(std::out_of_range& exception) {
                 std::cerr << "block command failed: " << exception.what() << '\n';
             }
+        } else if (strncmp(command.c_str(), rmBlockCommand.c_str(), strlen(rmBlockCommand.c_str())) == 0) {
+            try {
+                int blockNumber = std::stoi(command.substr(rmBlockCommand.length() + 1));
+                if (blockNumber < 0 || blockNumber >= RM_RAM_SIZE) {
+                    std::cout << "Invalid block number. Please enter a number between 0 and " << RM_RAM_SIZE - 1 << "." << std::endl;
+                    continue;
+                }
+                memory.printBlock(blockNumber);
+            }
+            catch(std::out_of_range& exception) {
+                std::cerr << "rmBlock command failed: " << exception.what() << '\n';
+            }
+        } else if (command == "exit") {
+            std::cout << "Exiting debug mode." << std::endl;
+            break;
         } else {
             std::cout << "Unknown command: " << command << std::endl;
         }
