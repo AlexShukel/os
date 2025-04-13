@@ -21,6 +21,8 @@ public:
 
     Word& popFromStack();
     void pushToStack(Word& value);
+
+    void setFlags(const Word& result);
 };
 
 
