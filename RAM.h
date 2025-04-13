@@ -25,7 +25,7 @@ public:
     
     void writeWord(Word word, int block, int index);
 
-    Word *readWord(int block, int index);
+    Word& readWord(int block, int index);
     
     void printBlock(int block);
 

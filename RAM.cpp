@@ -39,8 +39,8 @@ void RAM::writeWord(Word word, int block, int index) {
     blocks[block].data[index] = word;
 }
 
-Word *RAM::readWord(int block, int index) {
-    return &blocks[block].data[index];
+Word& RAM::readWord(int block, int index) {
+    return blocks[block].data[index];
 }
 
 

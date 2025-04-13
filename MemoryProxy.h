@@ -15,9 +15,9 @@ class MemoryProxy {
 public:
     explicit MemoryProxy(RAM *ram);
 
-    void writeWord(Word word, int block, int index);
+    void writeWord(Word word, const int& address);
 
-    Word *readWord(int block, int index);
+    Word& readWord(const int& address);
 
     void setPageTable(MemoryBlock *pageTable);
 

@@ -63,7 +63,7 @@ void DataExchange::xchg() {
                         throw std::runtime_error("ERROR: each line on external storage must contain exactly one word.");
                     }
 
-                    memory->writeWord(Word(line), currentWordIndex / BLOCK_SIZE, currentWordIndex % BLOCK_SIZE);
+                    memory->writeWord(Word(line), currentWordIndex);
                     ++currentWordIndex;
 
                     line = readLine(hdd);
@@ -76,7 +76,7 @@ void DataExchange::xchg() {
                         throw std::runtime_error("ERROR: each line on external storage must contain exactly one word.");
                     }
     
-                    memory->writeWord(Word(line), currentWordIndex / BLOCK_SIZE, currentWordIndex % BLOCK_SIZE);
+                    memory->writeWord(Word(line), currentWordIndex);
                     ++currentWordIndex;
 
                     line = readLine(hdd);
