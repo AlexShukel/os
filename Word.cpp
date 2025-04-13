@@ -8,17 +8,15 @@
 #include <iomanip>
 #include <ios>
 #include <iosfwd>
+#include <iostream>
 
 Word::Word(const int n) {
-    std::stringstream ss;
-    ss << std::hex << std::uppercase << std::setfill('0') << std::setw(WORD_SIZE) << (n & 0xFFFFFF);
-    memcpy(word, ss.str().c_str(), WORD_SIZE);
+    sprintf(word, "%06X", n);
 }
 
 Word::Word(const std::string &str) {
     memcpy(word, str.c_str(), WORD_SIZE);
 }
-
 
 bool Word::isNumber() const {
     for (int i = 0; i < WORD_SIZE; i++) {
@@ -41,4 +39,37 @@ int Word::toInteger() const {
     ss >> n;
     return n;
 }
+
+bool Word::equals(std::string str) const {
+    return memcmp(word, str.c_str(), WORD_SIZE) == 0;
+}
+
+bool Word::startsWith(std::string str) const {
+    return memcmp(word, str.c_str(), str.size()) == 0;
+}
+
+std::string Word::substring(int index) const {
+    if (index < 0 || index >= WORD_SIZE) {
+        throw std::invalid_argument("Word::substring: Invalid index");
+    }
+
+    return std::string(word).substr(index);
+}
+
+void Word::operator--() {
+    if (!isNumber()) {
+        throw std::invalid_argument("Word::operator--: Invalid number");
+    }
+
+    sprintf(word, "%06X", toInteger() - 1);
+}
+
+void Word::operator++() {
+    if (!isNumber()) {
+        throw std::invalid_argument("Word::operator++: Invalid number");
+    }
+
+    sprintf(word, "%06X", toInteger() + 1);
+}
+
 

@@ -23,6 +23,18 @@ public:
     bool isNumber() const;
 
     int toInteger() const;
+
+
+
+    bool equals(std::string str) const;
+
+    bool startsWith(std::string str) const;
+
+    std::string substring(int index) const;
+
+    void operator--();
+
+    void operator++();
 };
 
 

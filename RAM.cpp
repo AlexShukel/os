@@ -15,10 +15,10 @@ RAM::RAM() {
     }
 }
 
-int RAM::pickRandomBlockIndex() {
+int RAM::pickFreeBlockIndex() {
     std::vector<int> freeIndices;
 
-    for (int i = 0; i < OS_MEMORY_START_BLOCK; ++i) {
+    for (int i = 0; i < RM_RAM_SIZE; ++i) {
         if (free[i]) {
             freeIndices.push_back(i);
         }
@@ -39,6 +39,11 @@ void RAM::writeWord(Word word, int block, int index) {
     blocks[block].data[index] = word;
 }
 
+Word *RAM::readWord(int block, int index) {
+    return &blocks[block].data[index];
+}
+
+
 void RAM::printBlock(int block) {
     for (int i = 0; i < BLOCK_SIZE; i++) {
         printf("%.6s ", blocks[block].data[i].word);
@@ -46,19 +51,7 @@ void RAM::printBlock(int block) {
     printf("\n");
 }
 
-int RAM::initPageTable() {
-    int pageTableIndex = pageTableCount;
-    MemoryBlock& pageTable = getPageTable(pageTableIndex);
-
-    for (int i = 0; i < BLOCK_SIZE; ++i) {
-        int randomBlock = pickRandomBlockIndex();
-        pageTable.data[i] = Word(randomBlock);
-    }
-
-    ++pageTableCount;
-    return pageTableIndex;
+MemoryBlock *RAM::getBlock(int index) {
+    return &blocks[index];
 }
 
-MemoryBlock& RAM::getPageTable(int index) {
-    return blocks[OS_MEMORY_START_BLOCK + index - 1];
-}

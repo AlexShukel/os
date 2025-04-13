@@ -5,16 +5,19 @@
 #ifndef VIRTUAL_MACHINE_H
 #define VIRTUAL_MACHINE_H
 
+#include "MemoryProxy.h"
 #include "shared.h"
 #include "Word.h"
 
 class VirtualMachine {
-    Word pc = Word(0); // Program counter
-    Word sp = Word(255); // Stack pointer
-    unsigned char c = 0; // Flags
 public:
+    Word pc = Word(0); // Program counter
+    Word sp = Word(256); // Stack pointer
+    unsigned char c = 0; // Flags
 
-    VirtualMachine() = default;
+    MemoryProxy *memory;
+
+    explicit VirtualMachine(MemoryProxy *memory);
 };
 
 

@@ -3,3 +3,6 @@
 //
 
 #include "VirtualMachine.h"
+
+VirtualMachine::VirtualMachine(MemoryProxy *memory): memory(memory) {}
+

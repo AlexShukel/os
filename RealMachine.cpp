@@ -8,28 +8,42 @@
 #include "RealMachine.h"
 #include "Word.h"
 
-RealMachine::RealMachine(): cpu(), dataExchange(&memory) {}
+RealMachine::RealMachine(): cpu(), memoryProxy(&memory), dataExchange(&memoryProxy) {}
 
 
 
 void RealMachine::loadAndRunProgram(const std::string &fileName) {
-    int pageTableIndex = memory.initPageTable();
-    
+    newPageTable();
+
+    // DataExchange will copy from hdd.txt all program's parts on the fly
     dataExchange.path = fileName;
     dataExchange.sourceObject = EXTERNAL;
     dataExchange.destinationObject = MEMORY;
-    dataExchange.pageTableIndex = pageTableIndex;
 
     dataExchange.xchg();
 
-    MemoryBlock& newProcessPageTable = memory.getPageTable(pageTableIndex);
     // print code segment
-    memory.printBlock(newProcessPageTable.data[CODE_SEGMENT_START_BLOCK].toInteger());
+    memoryProxy.printBlock(CODE_SEGMENT_START_BLOCK);
     // print data segment
-    memory.printBlock(newProcessPageTable.data[DATA_SEGMENT_START_BLOCK].toInteger()); 
+    memoryProxy.printBlock(DATA_SEGMENT_START_BLOCK);
     // print page table from OS memory
-    memory.printBlock(OS_MEMORY_START_BLOCK + pageTableIndex - 1);
+    memory.printBlock(cpu.ptr.toInteger());
 
-    // TODO: create VM
+    VirtualMachine vm(&memoryProxy);
+    virtualMachines.push_back(vm);
+
+    while (cpu.exec(&vm) != -1) {}
+}
+
+void RealMachine::newPageTable() {
+    int pageTableBlockIndex = memory.pickFreeBlockIndex();
+    cpu.ptr = Word(); // set PTR to point on new page table
+
+    for (int i = 0; i < BLOCK_SIZE; ++i) {
+        int randomBlock = memory.pickFreeBlockIndex();
+        memory.writeWord(Word(randomBlock), pageTableBlockIndex, i);
+    }
+
+    memoryProxy.setPageTable(memory.getBlock(pageTableBlockIndex));
 }
 

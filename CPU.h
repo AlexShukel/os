@@ -8,13 +8,14 @@
 #include <iostream>
 
 #include "shared.h"
+#include "VirtualMachine.h"
 #include "Word.h"
 
 class CPU {
 public:
-    char ptr[5]; // Paging table
-    char pc[4]; // Program counter
-    char sp[4]; // Stack pointer
+    Word ptr; // Paging table
+    Word pc; // Program counter
+    Word sp; // Stack pointer
     Byte c; // Flags
     Byte pi; // Program interruptions
     Byte si; // Supervisor interruptions
@@ -23,9 +24,7 @@ public:
 
     CPU() = default;
 
-    void exec(Word command) {
-        // switch
-    }
+    int exec(VirtualMachine *vm);
 };
 
 
