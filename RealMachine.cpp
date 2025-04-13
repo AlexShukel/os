@@ -38,10 +38,14 @@ void RealMachine::updateProcesses() {
     MemoryBlock& pageTable = memory.getPageTable(createdProcesses[0].pageTableAddress);
     Word codeSegmentAddress = pageTable.data[0];
     MemoryBlock& codeSegment = memory.getBlock(codeSegmentAddress.toInteger());
+    int result = 0;
 
-    for (int i = 0; i < 5; ++i) {
+    do
+    {
         Word instruction = codeSegment.data[createdProcesses[0].virtualMachine.pc.toInteger()];    
-        cpu.exec(instruction);
+        result = cpu.exec(instruction);
         createdProcesses[0].virtualMachine.step();
-    }
+    } while (result != -1);
+    
+    std::cout << "Process " << createdProcesses[0].pid << " finished execution." << std::endl;
 }

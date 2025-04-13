@@ -4,7 +4,7 @@
 
 #include "CPU.h"
 
-void CPU::exec(const Word& command) {
+int CPU::exec(const Word& command) {
     std::string opcode(command.word, 6);
     std::cout << "Executing opcode: " << opcode << std::endl;
 
@@ -48,7 +48,10 @@ void CPU::exec(const Word& command) {
         std::cout << "Parsed PRTS00" << std::endl;
     } else if (opcode == "HALT00") {
         std::cout << "Parsed HALT00" << std::endl;
+        return -1;
     } else {
         throw std::runtime_error("Unknown instruction: " + opcode);
     }
+
+    return 0;
 }

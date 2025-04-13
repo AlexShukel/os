@@ -23,7 +23,7 @@ public:
 
     CPU() = default;
 
-    void exec(const Word& command);
+    int exec(const Word& command);
 };
 
 
