@@ -61,7 +61,9 @@ void Word::operator--() {
         throw std::invalid_argument("Word::operator--: Invalid number");
     }
 
-    sprintf(word, "%06X", toInteger() - 1);
+    char buffer[WORD_SIZE + 1];
+    snprintf(buffer, sizeof(buffer), "%06X", toInteger() - 1);
+    memcpy(word, buffer, WORD_SIZE);
 }
 
 void Word::operator++() {
@@ -69,7 +71,9 @@ void Word::operator++() {
         throw std::invalid_argument("Word::operator++: Invalid number");
     }
 
-    sprintf(word, "%06X", toInteger() + 1);
+    char buffer[WORD_SIZE + 1];
+    snprintf(buffer, sizeof(buffer), "%06X", toInteger() + 1);
+    memcpy(word, buffer, WORD_SIZE);
 }
 
 
