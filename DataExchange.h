@@ -7,7 +7,7 @@
 
 #include <string>
 
-#include "RAM.h"
+#include "MemoryProxy.h"
 #include "Word.h"
 
 enum MemoryObject {
@@ -26,12 +26,12 @@ public:
     Word byteCount;
     MemoryObject sourceObject;
     MemoryObject destinationObject;
-    int pageTableIndex;
 
-    RAM *memory;
+    MemoryProxy *memory;
+
     std::string path;
 
-    explicit DataExchange(RAM *memory);
+    explicit DataExchange(MemoryProxy *memory);
 
     void xchg();
 };

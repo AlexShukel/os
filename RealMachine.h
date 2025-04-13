@@ -18,13 +18,17 @@ class RealMachine {
 public:
     CPU cpu;
     RAM memory;
+    MemoryProxy memoryProxy;
     DataExchange dataExchange;
+    std::vector<VirtualMachine> virtualMachines;
 
     RealMachine();
 
-    void loadAndRunProgram(const std::string &fileName);
+    VirtualMachine loadProgram(const std::string &fileName);
+    void runProgram(VirtualMachine& virtualMachine);
+    void debugProgram(VirtualMachine& virtualMachine);
 private:
-    MemoryBlock initPageTable();
+    void newPageTable();
 };
 
 

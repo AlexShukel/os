@@ -8,8 +8,7 @@
 #include <iostream>
 #include <stdexcept>
 
-DataExchange::DataExchange(RAM *memory) {
-    this->memory = memory;
+DataExchange::DataExchange(MemoryProxy *memory): memory(memory) {
     destinationPointer = Word();
     sourcePointer = Word();
     destinationObject = MEMORY;
@@ -42,8 +41,6 @@ void DataExchange::xchg() {
         }
 
         if (destinationObject == MEMORY) {
-            MemoryBlock& pageTable = memory->getPageTable(pageTableIndex);
-
             std::string line = readLine(hdd);
             while (!line.empty()) {
                 while (line != "@FILE0") {
@@ -60,39 +57,27 @@ void DataExchange::xchg() {
                 }
                 line = readLine(hdd);
 
-                int currentWordIndex = 0;
-                int currentBlock = CODE_SEGMENT_START_BLOCK;
+                int currentWordIndex = CODE_SEGMENT_START_BLOCK;
                 while (line != "@DATA0") {
                     if (line.size() != WORD_SIZE) {
                         throw std::runtime_error("ERROR: each line on external storage must contain exactly one word.");
                     }
 
-                    memory->writeWord(Word(line), pageTable.data[currentBlock].toInteger(), currentWordIndex);
+                    memory->writeWord(Word(line), currentWordIndex);
                     ++currentWordIndex;
-
-                    if (currentWordIndex >= BLOCK_SIZE - 1) {
-                        currentWordIndex = 0;
-                        ++currentBlock;
-                    }
 
                     line = readLine(hdd);
                 }
                 line = readLine(hdd);
                 
-                currentWordIndex = 0;
-                currentBlock = DATA_SEGMENT_START_BLOCK;
+                currentWordIndex = DATA_SEGMENT_START_BLOCK * BLOCK_SIZE;
                 while (line != "@END00") {
                     if (line.size() != WORD_SIZE) {
                         throw std::runtime_error("ERROR: each line on external storage must contain exactly one word.");
                     }
     
-                    memory->writeWord(Word(line), pageTable.data[currentBlock].toInteger(), currentWordIndex);
+                    memory->writeWord(Word(line), currentWordIndex);
                     ++currentWordIndex;
-
-                    if (currentWordIndex >= BLOCK_SIZE - 1) {
-                        currentWordIndex = 0;
-                        ++currentBlock;
-                    }
 
                     line = readLine(hdd);
                 }

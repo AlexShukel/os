@@ -11,6 +11,8 @@
 
 
 class Word {
+private:
+    void saveInHex(const int& n);
 public:
     char word[WORD_SIZE]{ '0', '0', '0', '0', '0', '0' };
 
@@ -23,6 +25,28 @@ public:
     bool isNumber() const;
 
     int toInteger() const;
+
+
+
+    bool equals(std::string str) const;
+
+    bool startsWith(std::string str) const;
+
+    std::string substring(int index) const;
+
+    void operator--();
+
+    void operator++();
+
+    Word operator+(const Word& other) const;
+    Word operator-(const Word& other) const;
+    Word operator*(const Word& other) const;
+    Word operator/(const Word& other) const;
+    Word operator&(const Word& other) const;
+    Word operator|(const Word& other) const;
+    Word operator^(const Word& other) const;
+
+    friend std::ostream& operator<<(std::ostream& os, const Word& word);
 };
 
 

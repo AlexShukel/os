@@ -11,13 +11,11 @@
 #define BLOCK_SIZE 256 // 256 words in a block
 #define WORD_SIZE 6 // 6 bytes in a word
 
-// Real machine memory. 630 block for user memory and 10 blocks for OS memory
-#define USER_MEMORY_START_BLOCK 0
-#define OS_MEMORY_START_BLOCK (RM_RAM_SIZE - 10)
-
 // Virtual machine memory
+#define VIRTUAL_MEMORY_BLOCKS 256 // 256 blocks of 256 words each
 #define CODE_SEGMENT_START_BLOCK 0
-#define DATA_SEGMENT_START_BLOCK 120
+#define DATA_SEGMENT_START_BLOCK 16
+#define STACK_BEGIN 255
 
 using Byte = char;
 
