@@ -24,7 +24,9 @@ public:
 
     RealMachine();
 
-    void loadAndRunProgram(const std::string &fileName);
+    VirtualMachine loadProgram(const std::string &fileName);
+    void runProgram(VirtualMachine& virtualMachine);
+    void debugProgram(VirtualMachine& virtualMachine);
 private:
     void newPageTable();
 };

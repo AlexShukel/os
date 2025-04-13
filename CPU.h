@@ -24,7 +24,7 @@ public:
 
     CPU() = default;
 
-    int exec(VirtualMachine *vm);
+    int exec(VirtualMachine& virtualMachine);
 };
 
 

@@ -53,11 +53,14 @@ int main() {
 
             if (command == "run") {
                 std::string path = args[0];
-                realMachine.loadAndRunProgram(path);
+                VirtualMachine vm = realMachine.loadProgram(path);
+                realMachine.runProgram(vm);
             }
 
             if (command == "debug") {
-                // TODO
+                std::string path = args[0];
+                VirtualMachine vm = realMachine.loadProgram(path);
+                realMachine.debugProgram(vm);
             }
         } else {
             std::cout << "No command entered." << std::endl;

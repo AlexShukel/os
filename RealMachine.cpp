@@ -10,9 +10,7 @@
 
 RealMachine::RealMachine(): cpu(), memoryProxy(&memory), dataExchange(&memoryProxy) {}
 
-
-
-void RealMachine::loadAndRunProgram(const std::string &fileName) {
+VirtualMachine RealMachine::loadProgram(const std::string &fileName) {
     newPageTable();
 
     // DataExchange will copy from hdd.txt all program's parts on the fly
@@ -22,17 +20,18 @@ void RealMachine::loadAndRunProgram(const std::string &fileName) {
 
     dataExchange.xchg();
 
-    // print code segment
-    memoryProxy.printBlock(CODE_SEGMENT_START_BLOCK);
-    // print data segment
-    memoryProxy.printBlock(DATA_SEGMENT_START_BLOCK);
-    // print page table from OS memory
-    memory.printBlock(cpu.ptr.toInteger());
-
     VirtualMachine vm(&memoryProxy);
     virtualMachines.push_back(vm);
 
-    while (cpu.exec(&vm) != -1) {}
+    return vm;
+}
+
+void RealMachine::runProgram(VirtualMachine& virtualMachine) {
+    while (cpu.exec(virtualMachine) != -1) {}
+}
+
+void RealMachine::debugProgram(VirtualMachine& virtualMachine) {
+
 }
 
 void RealMachine::newPageTable() {
