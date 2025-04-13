@@ -11,11 +11,17 @@
 #include <iostream>
 
 Word::Word(const int n) {
-    sprintf(word, "%06X", n);
+    saveInHex(n);
 }
 
 Word::Word(const std::string &str) {
     memcpy(word, str.c_str(), WORD_SIZE);
+}
+
+void Word::saveInHex(const int& n) {
+    char buffer[WORD_SIZE + 1];
+    snprintf(buffer, sizeof(buffer), "%06X", n);
+    memcpy(word, buffer, WORD_SIZE);
 }
 
 bool Word::isNumber() const {
@@ -61,9 +67,7 @@ void Word::operator--() {
         throw std::invalid_argument("Word::operator--: Invalid number");
     }
 
-    char buffer[WORD_SIZE + 1];
-    snprintf(buffer, sizeof(buffer), "%06X", toInteger() - 1);
-    memcpy(word, buffer, WORD_SIZE);
+    saveInHex(toInteger() - 1);
 }
 
 void Word::operator++() {
@@ -71,9 +75,7 @@ void Word::operator++() {
         throw std::invalid_argument("Word::operator++: Invalid number");
     }
 
-    char buffer[WORD_SIZE + 1];
-    snprintf(buffer, sizeof(buffer), "%06X", toInteger() + 1);
-    memcpy(word, buffer, WORD_SIZE);
+    saveInHex(toInteger() + 1);
 }
 
 

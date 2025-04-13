@@ -11,6 +11,8 @@
 
 
 class Word {
+private:
+    void saveInHex(const int& n);
 public:
     char word[WORD_SIZE]{ '0', '0', '0', '0', '0', '0' };
 
