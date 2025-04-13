@@ -6,16 +6,19 @@
 #define VIRTUAL_MACHINE_H
 
 #include "MemoryProxy.h"
-#include "shared.h"
 #include "Word.h"
+
+#define CF 0b00000001
+#define ZF 0b00000010
 
 class VirtualMachine {
 public:
     Word pc = Word(0); // Program counter
     Word sp = Word(65536); // Stack pointer
-    unsigned char c = 0; // Flags
+
     // 1 bit - CF (carry flag)
     // 2 bit - ZF (zero flag)
+    unsigned char c = 0; // Flags
 
     MemoryProxy *memory;
 
@@ -25,6 +28,8 @@ public:
     void pushToStack(Word& value);
 
     void setZeroFlag(const Word& result);
+
+    void setCarryFlag(bool value);
 };
 
 

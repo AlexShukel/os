@@ -19,8 +19,17 @@ void VirtualMachine::pushToStack(Word& value) {
 
 void VirtualMachine::setZeroFlag(const Word& result) {
     if (result.toInteger() == 0) {
-        c |= 0b10; // Set ZF;
+        c |= ZF;
     } else {
-        c &= 0b11; // Clear ZF;
+        c &= ~ZF;
     }
 }
+
+void VirtualMachine::setCarryFlag(bool value) {
+    if (value) {
+        c |= CF;
+    } else {
+        c &= ~CF;
+    }
+}
+
