@@ -52,6 +52,11 @@ int CPU::exec(VirtualMachine *vm) {
         Logger::debug("AND000: %.6s & %.6s = %.6s", arg1.word, arg2.word, result.word);
         vm->pushToStack(result);
     } else if (command.equals("OR0000")) {
+        Word& arg1 = vm->popFromStack();
+        Word& arg2 = vm->popFromStack();
+        Word result = arg1 | arg2;
+        Logger::debug("OR0000: %.6s | %.6s = %.6s", arg1.word, arg2.word, result.word);
+        vm->pushToStack(result);
     } else if (command.equals("XOR000")) {
     } else if (command.equals("JUMP00")) {
     } else if (command.equals("JUMPB0")) {
