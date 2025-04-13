@@ -19,8 +19,8 @@ public:
 
     explicit VirtualMachine(MemoryProxy *memory);
 
-    void pushToStack(Word& address);
-    void popFromStack(Word& address);
+    Word& popFromStack();
+    void pushToStack(Word& value);
 };
 
 

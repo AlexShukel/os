@@ -37,6 +37,8 @@ public:
     void operator--();
 
     void operator++();
+
+    Word operator+(const Word& other) const;
 };
 
 

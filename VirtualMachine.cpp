@@ -6,14 +6,13 @@
 
 VirtualMachine::VirtualMachine(MemoryProxy *memory): memory(memory) {}
 
-void VirtualMachine::pushToStack(Word& address) {
-    --sp; // Move stack pointer one step to the left
-    Word& target = memory->readWord(address.toInteger());
-    memory->writeWord(target, sp.toInteger());
+Word& VirtualMachine::popFromStack() {
+    Word& word = memory->readWord(sp.toInteger());
+    ++sp;
+    return word;
 }
 
-void VirtualMachine::popFromStack(Word& address) {
-    Word& target = memory->readWord(sp.toInteger());
-    memory->writeWord(target, address.toInteger());
-    ++sp; // Move stack pointer one step to the right
+void VirtualMachine::pushToStack(Word& value) {
+    --sp;
+    memory->writeWord(value, sp.toInteger());
 }

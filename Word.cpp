@@ -78,4 +78,10 @@ void Word::operator++() {
     saveInHex(toInteger() + 1);
 }
 
+Word Word::operator+(const Word& other) const {
+    if (!isNumber() || !other.isNumber()) {
+        throw std::invalid_argument("Word::operator+: Invalid number");
+    }
 
+    return Word(toInteger() + other.toInteger());
+}

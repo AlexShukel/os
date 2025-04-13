@@ -13,7 +13,11 @@ int CPU::exec(VirtualMachine *vm) {
     Logger::debug("Executing command %.6s", command.word);
 
     if (command.equals("ADD000")) {
-        
+        Word& arg1 = vm->popFromStack();
+        Word& arg2 = vm->popFromStack();
+        Word result = arg1 + arg2;
+        Logger::debug("ADD000: %.6s + %.6s = %.6s", arg1.word, arg2.word, result.word);
+        vm->pushToStack(result);
     } else if (command.equals("SUB000")) {
     } else if (command.equals("MUL000")) {
     } else if (command.equals("DIV000")) {
@@ -30,11 +34,13 @@ int CPU::exec(VirtualMachine *vm) {
     } else if (command.startsWith("PU")) {
         std::string arg = command.substring(2); // Get the address from command inline args
         Word address("00" + arg); // Adjust the length of arg string
-        vm->pushToStack(address);
+        Word& target = vm->memory->readWord(address.toInteger());
+        vm->pushToStack(target);
     } else if (command.startsWith("PO")) {
         std::string arg = command.substring(2); // Get the address from command inline args
         Word address("00" + arg); // Adjust the length of arg string
-        vm->popFromStack(address);
+        Word& target = vm->popFromStack();
+        vm->memory->writeWord(target, address.toInteger());
     } else if (command.equals("GETD00")) {
     } else if (command.equals("PRTW00")) {
     } else if (command.equals("PRTS00")) {
