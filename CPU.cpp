@@ -19,6 +19,11 @@ int CPU::exec(VirtualMachine *vm) {
         Logger::debug("ADD000: %.6s + %.6s = %.6s", arg1.word, arg2.word, result.word);
         vm->pushToStack(result);
     } else if (command.equals("SUB000")) {
+        Word& arg1 = vm->popFromStack();
+        Word& arg2 = vm->popFromStack();
+        Word result = arg1 - arg2;
+        Logger::debug("ADD000: %.6s - %.6s = %.6s", arg1.word, arg2.word, result.word);
+        vm->pushToStack(result);
     } else if (command.equals("MUL000")) {
     } else if (command.equals("DIV000")) {
     } else if (command.equals("COMP00")) {

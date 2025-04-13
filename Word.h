@@ -39,6 +39,7 @@ public:
     void operator++();
 
     Word operator+(const Word& other) const;
+    Word operator-(const Word& other) const;
 
     friend std::ostream& operator<<(std::ostream& os, const Word& word);
 };
