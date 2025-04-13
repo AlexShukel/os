@@ -16,8 +16,10 @@
 #define OS_MEMORY_START_BLOCK (RM_RAM_SIZE - 10)
 
 // Virtual machine memory
+#define VIRTUAL_MACHINE_MEMORY_SIZE 256
 #define CODE_SEGMENT_START_BLOCK 0
 #define DATA_SEGMENT_START_BLOCK 16
+#define STACK_SEGMENT_START_BLOCK 136
 
 using Byte = char;
 

@@ -50,7 +50,7 @@ int RAM::initPageTable() {
     int pageTableIndex = pageTableCount;
     MemoryBlock& pageTable = getPageTable(pageTableIndex);
 
-    for (int i = 0; i < BLOCK_SIZE; ++i) {
+    for (int i = 0; i < VIRTUAL_MACHINE_MEMORY_SIZE; ++i) {
         int randomBlock = pickRandomBlockIndex();
         pageTable.data[i] = Word(randomBlock);
     }
