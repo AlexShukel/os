@@ -37,7 +37,7 @@ void RealMachine::loadAndRunProgram(const std::string &fileName) {
 
 void RealMachine::newPageTable() {
     int pageTableBlockIndex = memory.pickFreeBlockIndex();
-    cpu.ptr = Word(); // set PTR to point on new page table
+    cpu.ptr = Word(pageTableBlockIndex); // set PTR to point on new page table
 
     for (int i = 0; i < BLOCK_SIZE; ++i) {
         int randomBlock = memory.pickFreeBlockIndex();
