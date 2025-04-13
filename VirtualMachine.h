@@ -14,6 +14,8 @@ public:
     Word pc = Word(0); // Program counter
     Word sp = Word(65536); // Stack pointer
     unsigned char c = 0; // Flags
+    // 1 bit - CF (carry flag)
+    // 2 bit - ZF (zero flag)
 
     MemoryProxy *memory;
 
@@ -22,7 +24,7 @@ public:
     Word& popFromStack();
     void pushToStack(Word& value);
 
-    void setFlags(const Word& result);
+    void setZeroFlag(const Word& result);
 };
 
 

@@ -83,7 +83,7 @@ Word Word::operator+(const Word& other) const {
         throw std::invalid_argument("Word::operator+: Invalid number");
     }
 
-    return Word(toInteger() + other.toInteger());
+    return Word((toInteger() + other.toInteger()) % 0x1000000);
 }
 
 Word Word::operator-(const Word& other) const {
@@ -91,7 +91,14 @@ Word Word::operator-(const Word& other) const {
         throw std::invalid_argument("Word::operator+: Invalid number");
     }
 
-    return Word(toInteger() - other.toInteger());
+    int i1 = toInteger();
+    int i2 = other.toInteger();
+
+    if (i1 < i2) {
+        i1 += 0x1000000;
+    }
+
+    return Word(i1 - i2);
 }
 
 Word Word::operator*(const Word& other) const {

@@ -5,6 +5,7 @@
 #include "CPU.h"
 
 #include "Logger.h"
+#include <bitset>
 
 int CPU::exec(VirtualMachine *vm) {
     int commandAddress = vm->pc.toInteger();
@@ -17,34 +18,54 @@ int CPU::exec(VirtualMachine *vm) {
         Word& arg2 = vm->popFromStack();
         Word result = arg1 + arg2;
         Logger::debug("ADD000: %.6s + %.6s = %.6s", arg1.word, arg2.word, result.word);
-        vm->setFlags(result);
+        vm->setZeroFlag(result);
+
+        if (arg1.toInteger() + arg2.toInteger() > result.toInteger()) {
+            vm->c |= 0b1; // Set CF
+        } else {
+            vm->c &= 0b10; // Clear CF
+        }
+
         vm->pushToStack(result);
     } else if (command.equals("SUB000")) {
         Word& arg1 = vm->popFromStack();
         Word& arg2 = vm->popFromStack();
         Word result = arg1 - arg2;
         Logger::debug("SUB000: %.6s - %.6s = %.6s", arg1.word, arg2.word, result.word);
-        vm->setFlags(result);
+        vm->setZeroFlag(result);
+
+        if (arg1.toInteger() - arg2.toInteger() < result.toInteger()) {
+            vm->c |= 0b1; // Set CF
+        } else {
+            vm->c &= 0b10; // Clear CF
+        }
+
         vm->pushToStack(result);
     } else if (command.equals("MUL000")) {
         Word& arg1 = vm->popFromStack();
         Word& arg2 = vm->popFromStack();
         Word result = arg1 * arg2;
         Logger::debug("MUL000: %.6s * %.6s = %.6s", arg1.word, arg2.word, result.word);
-        vm->setFlags(result);
+        vm->setZeroFlag(result);
         vm->pushToStack(result);
     } else if (command.equals("DIV000")) {
         Word& arg1 = vm->popFromStack();
         Word& arg2 = vm->popFromStack();
         Word result = arg1 / arg2;
         Logger::debug("DIV000: %.6s / %.6s = %.6s", arg1.word, arg2.word, result.word);
-        vm->setFlags(result);
+        vm->setZeroFlag(result);
         vm->pushToStack(result);
     } else if (command.equals("COMP00")) {
         Word& arg1 = vm->popFromStack();
         Word& arg2 = vm->popFromStack();
         Word result = arg1 - arg2;
-        vm->setFlags(result);
+        vm->setZeroFlag(result);
+
+        if (arg1.toInteger() - arg2.toInteger() < result.toInteger()) {
+            vm->c |= 0b1; // Set CF
+        } else {
+            vm->c &= 0b10; // Clear CF
+        }
     } else if (command.equals("AND000")) {
         Word& arg1 = vm->popFromStack();
         Word& arg2 = vm->popFromStack();
@@ -89,7 +110,7 @@ int CPU::exec(VirtualMachine *vm) {
     } else {
         throw std::runtime_error("Unknown instruction: " + std::string(command.word));
     }
-
+    std::cout << "Flags: " << std::bitset<8>(vm->c) << std::endl;
     ++vm->pc;
     return 0;
 }
