@@ -12,6 +12,7 @@
 #define WORD_SIZE 6 // 6 bytes in a word
 
 // Virtual machine memory
+#define VIRTUAL_MEMORY_BLOCKS 256 // 256 blocks of 256 words each
 #define CODE_SEGMENT_START_BLOCK 0
 #define DATA_SEGMENT_START_BLOCK 16
 #define STACK_BEGIN 255

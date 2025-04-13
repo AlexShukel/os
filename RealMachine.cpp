@@ -4,6 +4,8 @@
 
 #include <fstream>
 #include <sstream>
+#include <bitset>
+#include <cstring>
 
 #include "RealMachine.h"
 #include "Word.h"
@@ -31,14 +33,49 @@ void RealMachine::runProgram(VirtualMachine& virtualMachine) {
 }
 
 void RealMachine::debugProgram(VirtualMachine& virtualMachine) {
+    int commandResult = 0;
+    while (commandResult != -1) {
+        std::string command;
+        std::cout << "===Registers===" << std::endl;
+        std::cout << "PTR: " << cpu.ptr << std::endl;
+        std::cout << "PC: " << virtualMachine.pc << std::endl;
+        std::cout << "SP: " << virtualMachine.sp << std::endl;
+        std::cout << "C: " << std::bitset<8>(virtualMachine.c) << std::endl;
+        std::cout << "===============" << std::endl;
+        std::cout << "Available commands:" << std::endl;
+        std::cout << "'next' - perform next instruction" << std::endl;
+        std::cout << "'block <block_number>' - print virtual machine block\n\n";
+        std::cout << "Next instruction: " << virtualMachine.memory->readWord(virtualMachine.pc.toInteger()) << std::endl;
+        std::cout << "Enter command: ";
+        std::getline(std::cin, command);
 
+        std::string blockCommand = "block";
+        
+        if (command == "next") {
+            commandResult = cpu.exec(virtualMachine);
+        } else if (strncmp(command.c_str(), blockCommand.c_str(), strlen(blockCommand.c_str())) == 0) {
+            try {
+                int blockNumber = std::stoi(command.substr(blockCommand.length() + 1));
+                if (blockNumber < 0 || blockNumber >= VIRTUAL_MEMORY_BLOCKS) {
+                    std::cout << "Invalid block number. Please enter a number between 0 and " << VIRTUAL_MEMORY_BLOCKS - 1 << "." << std::endl;
+                    continue;
+                }
+                virtualMachine.memory->printBlock(blockNumber);
+            }
+            catch(std::out_of_range& exception) {
+                std::cerr << "block command failed: " << exception.what() << '\n';
+            }
+        } else {
+            std::cout << "Unknown command: " << command << std::endl;
+        }
+    }
 }
 
 void RealMachine::newPageTable() {
     int pageTableBlockIndex = memory.pickFreeBlockIndex();
     cpu.ptr = Word(pageTableBlockIndex); // set PTR to point on new page table
 
-    for (int i = 0; i < BLOCK_SIZE; ++i) {
+    for (int i = 0; i < VIRTUAL_MEMORY_BLOCKS; ++i) {
         int randomBlock = memory.pickFreeBlockIndex();
         memory.writeWord(Word(randomBlock), pageTableBlockIndex, i);
     }
