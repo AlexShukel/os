@@ -12,12 +12,15 @@
 class VirtualMachine {
 public:
     Word pc = Word(0); // Program counter
-    Word sp = Word(256); // Stack pointer
+    Word sp = Word(65536); // Stack pointer
     unsigned char c = 0; // Flags
 
     MemoryProxy *memory;
 
     explicit VirtualMachine(MemoryProxy *memory);
+
+    void pushToStack(Word& address);
+    void popFromStack(Word& address);
 };
 
 
