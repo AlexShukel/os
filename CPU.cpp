@@ -135,6 +135,16 @@ int CPU::exec(VirtualMachine *vm) {
         Word& target = vm->popFromStack();
         vm->memory->writeWord(target, address.toInteger());
     } else if (command.equals("GETD00")) {
+        Word& address = vm->popFromStack();
+        Word& size = vm->popFromStack();
+        std::string buffer;
+        std::getline(std::cin, buffer);
+
+        for (int i = 0; i < size.toInteger(); ++i) {
+            vm->memory->writeWord(Word(buffer.substr(i * WORD_SIZE, WORD_SIZE)), address.toInteger());
+        }
+
+        Logger::debug("GETD00: %.6s", address.word);
     } else if (command.equals("PRTW00")) {
         Word& arg = vm->popFromStack();
         std::cout << arg << std::endl;
