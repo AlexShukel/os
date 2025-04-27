@@ -235,8 +235,8 @@ void CPU::processSupervisorInterrupt(VirtualMachine& virtualMachine) {
         case SupervisorInterrupt::GETD:
         {
             Logger::debug("GETD supervisor interrupt");
-            Word& address = virtualMachine.popFromStack();
             Word& size = virtualMachine.popFromStack();
+            Word& address = virtualMachine.popFromStack();
             std::string buffer;
             std::getline(std::cin, buffer);
 
