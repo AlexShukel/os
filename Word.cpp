@@ -3,6 +3,7 @@
 //
 
 #include "Word.h"
+#include "Logger.h"
 
 #include <cstring>
 #include <iomanip>
@@ -36,7 +37,7 @@ bool Word::isNumber() const {
 
 int Word::toInteger() const {
     if (!isNumber()) {
-        throw std::invalid_argument("Invalid number");
+        Logger::debug("Word::toInteger: Invalid number: %.6s", word);
     }
 
     std::stringstream ss;
@@ -56,7 +57,7 @@ bool Word::startsWith(std::string str) const {
 
 std::string Word::substring(int index) const {
     if (index < 0 || index >= WORD_SIZE) {
-        throw std::invalid_argument("Word::substring: Invalid index");
+        Logger::debug("Word::substring: Invalid index: %d", index);
     }
 
     return std::string(word).substr(index);
@@ -64,7 +65,7 @@ std::string Word::substring(int index) const {
 
 void Word::operator--() {
     if (!isNumber()) {
-        throw std::invalid_argument("Word::operator--: Invalid number");
+        Logger::debug("Word::operator--: Invalid number: %.6s", word);
     }
 
     saveInHex(toInteger() - 1);
@@ -72,7 +73,7 @@ void Word::operator--() {
 
 void Word::operator++() {
     if (!isNumber()) {
-        throw std::invalid_argument("Word::operator++: Invalid number");
+        Logger::debug("Word::operator++: Invalid number: %.6s", word);
     }
 
     saveInHex(toInteger() + 1);
@@ -80,7 +81,7 @@ void Word::operator++() {
 
 Word Word::operator+(const Word& other) const {
     if (!isNumber() || !other.isNumber()) {
-        throw std::invalid_argument("Word::operator+: Invalid number");
+        Logger::debug("Word::operator+: Invalid number: %.6s", word);
     }
 
     return Word((toInteger() + other.toInteger()) % 0x1000000);
@@ -88,7 +89,7 @@ Word Word::operator+(const Word& other) const {
 
 Word Word::operator-(const Word& other) const {
     if (!isNumber() || !other.isNumber()) {
-        throw std::invalid_argument("Word::operator+: Invalid number");
+        Logger::debug("Word::operator+: Invalid number: %.6s", word);
     }
 
     int i1 = toInteger();
@@ -103,7 +104,7 @@ Word Word::operator-(const Word& other) const {
 
 Word Word::operator*(const Word& other) const {
     if (!isNumber() || !other.isNumber()) {
-        throw std::invalid_argument("Word::operator+: Invalid number");
+        Logger::debug("Word::operator+: Invalid number: %.6s", word);
     }
 
     return Word(toInteger() * other.toInteger());
@@ -111,7 +112,7 @@ Word Word::operator*(const Word& other) const {
 
 Word Word::operator/(const Word& other) const {
     if (!isNumber() || !other.isNumber()) {
-        throw std::invalid_argument("Word::operator+: Invalid number");
+        Logger::debug("Word::operator+: Invalid number: %.6s", word);
     }
 
     return Word(toInteger() / other.toInteger());
@@ -119,7 +120,7 @@ Word Word::operator/(const Word& other) const {
 
 Word Word::operator&(const Word& other) const {
     if (!isNumber() || !other.isNumber()) {
-        throw std::invalid_argument("Word::operator+: Invalid number");
+        Logger::debug("Word::operator+: Invalid number: %.6s", word);
     }
 
     return Word(toInteger() & other.toInteger());
@@ -127,7 +128,7 @@ Word Word::operator&(const Word& other) const {
 
 Word Word::operator|(const Word& other) const {
     if (!isNumber() || !other.isNumber()) {
-        throw std::invalid_argument("Word::operator+: Invalid number");
+        Logger::debug("Word::operator+: Invalid number: %.6s", word);
     }
 
     return Word(toInteger() | other.toInteger());
@@ -135,7 +136,7 @@ Word Word::operator|(const Word& other) const {
 
 Word Word::operator^(const Word& other) const {
     if (!isNumber() || !other.isNumber()) {
-        throw std::invalid_argument("Word::operator+: Invalid number");
+        Logger::debug("Word::operator+: Invalid number: %.6s", word);
     }
 
     return Word(toInteger() ^ other.toInteger());

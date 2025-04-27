@@ -33,7 +33,7 @@ public:
 
     explicit DataExchange(MemoryProxy *memory);
 
-    void xchg();
+    int xchg();
 };
 
 

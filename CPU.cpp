@@ -152,7 +152,8 @@ int CPU::exec(VirtualMachine& virtualMachine) {
     } else if (command.equals("HALT00")) {
         return -1;
     } else {
-        throw std::runtime_error("Unknown instruction: " + std::string(command.word));
+        Logger::debug("Unknown instruction: %.6s", command.word);
+        return -1;
     }
     Logger::debug("Flags: %s", std::bitset<8>(virtualMachine.c).to_string().c_str());
     if (!isJump) {

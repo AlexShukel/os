@@ -54,12 +54,24 @@ int main() {
             if (command == "run") {
                 std::string path = args[0];
                 VirtualMachine vm = realMachine.loadProgram(path);
+
+                if (vm.memory == nullptr) {
+                    std::cerr << "Failed to load program from " << path << std::endl;
+                    continue;
+                }
+
                 realMachine.runProgram(vm);
             }
 
             if (command == "debug") {
                 std::string path = args[0];
                 VirtualMachine vm = realMachine.loadProgram(path);
+
+                if (vm.memory == nullptr) {
+                    std::cerr << "Failed to load program from " << path << std::endl;
+                    continue;
+                }
+
                 realMachine.debugProgram(vm);
             }
         } else {
