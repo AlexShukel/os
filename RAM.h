@@ -31,7 +31,7 @@ public:
 
     MemoryBlock *getBlock(int index);
 
-    int pickFreeBlockIndex();
+    int allocateBlock();
     int pickRandomBlockIndex();
 
     bool hasFreeSpace();

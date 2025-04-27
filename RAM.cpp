@@ -15,7 +15,7 @@ RAM::RAM() {
     }
 }
 
-int RAM::pickFreeBlockIndex() {
+int RAM::allocateBlock() {
     std::vector<int> freeIndices;
 
     for (int i = 0; i < RM_RAM_SIZE; ++i) {
@@ -30,20 +30,21 @@ int RAM::pickFreeBlockIndex() {
 
     static std::mt19937 rng(static_cast<unsigned int>(std::time(nullptr)));
     std::uniform_int_distribution<size_t> dist(0, freeIndices.size() - 1);
+    int block = freeIndices[dist(rng)];
+    free[block] = false;
 
-    return freeIndices[dist(rng)];
+    return block;
 }
 
 int RAM::pickRandomBlockIndex() {
-    random_device rd;
-    mt19937 rng(rd());
+    std::random_device rd;
+    std::mt19937 rng(rd());
     std::uniform_int_distribution<size_t> dist(0, RM_RAM_SIZE - 1);
 
     return dist(rng);
 }
 
 void RAM::writeWord(Word word, int block, int index) {
-    free[block] = false;
     blocks[block].data[index] = word;
 }
 

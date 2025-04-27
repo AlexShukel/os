@@ -20,9 +20,9 @@ class RealMachine {
 public:
     CPU cpu;
     RAM memory;
+    SwapFile swapFile;
     MemoryProxy memoryProxy;
     DataExchange dataExchange;
-    SwapFile swapFile;
     std::vector<VirtualMachine> virtualMachines;
 
     RealMachine();

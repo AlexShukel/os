@@ -10,7 +10,7 @@
 #include "RealMachine.h"
 #include "Word.h"
 
-RealMachine::RealMachine(): cpu(), memoryProxy(&memory), dataExchange(&memoryProxy), swapFile(SWAP_FILE, SWAP_BLOCKS) {}
+RealMachine::RealMachine() : cpu(), swapFile(SWAP_FILE, SWAP_BLOCKS), memoryProxy(&memory, swapFile), dataExchange(&memoryProxy) {}
 
 VirtualMachine RealMachine::loadProgram(const std::string &fileName) {
     newPageTable();
@@ -91,14 +91,14 @@ void RealMachine::debugProgram(VirtualMachine& virtualMachine) {
 }
 
 void RealMachine::newPageTable() {
-    int pageTableBlockIndex = memory.pickFreeBlockIndex();
+    int pageTableBlockIndex = memory.allocateBlock();
     cpu.ptr = Word(pageTableBlockIndex); // set PTR to point on new page table
 
     for (int i = 0; i < VIRTUAL_MEMORY_BLOCKS; ++i) {
         int block;
         if (memory.hasFreeSpace())
         {
-            block = memory.pickFreeBlockIndex();
+            block = memory.allocateBlock();
         }
         else
         {

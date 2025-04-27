@@ -4,7 +4,7 @@
 
 #include "MemoryProxy.h"
 
-MemoryProxy::MemoryProxy(RAM *memory): ram(memory), pageTable(nullptr) {}
+MemoryProxy::MemoryProxy(RAM *memory, SwapFile& swapFile) : ram(memory), pageTable(nullptr), swapFile(swapFile) {}
 
 Word& MemoryProxy::readWord(const int& address) {
     int block = address / BLOCK_SIZE;
@@ -17,6 +17,13 @@ void MemoryProxy::writeWord(Word word, const int& address) {
     int block = address / BLOCK_SIZE;
     int index = address % BLOCK_SIZE;
     int realBlock = pageTable->data[block].toInteger();
+    
+    if (realBlock >= RM_RAM_SIZE) {
+        int swapBlock = realBlock - RM_RAM_SIZE;
+        swapFile.writeWord(word, swapBlock, index);
+        return;
+    }
+
     ram->writeWord(word, realBlock, index);
 }
 
