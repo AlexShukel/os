@@ -34,6 +34,14 @@ int RAM::pickFreeBlockIndex() {
     return freeIndices[dist(rng)];
 }
 
+int RAM::pickRandomBlockIndex() {
+    random_device rd;
+    mt19937 rng(rd());
+    std::uniform_int_distribution<size_t> dist(0, RM_RAM_SIZE - 1);
+
+    return dist(rng);
+}
+
 void RAM::writeWord(Word word, int block, int index) {
     free[block] = false;
     blocks[block].data[index] = word;
@@ -55,3 +63,11 @@ MemoryBlock *RAM::getBlock(int index) {
     return &blocks[index];
 }
 
+bool RAM::hasFreeSpace() {
+    for (bool &i : free) {
+        if (i) {
+            return true;
+        }
+    }
+    return false;
+}

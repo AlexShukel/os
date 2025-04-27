@@ -10,25 +10,7 @@
 #include "RealMachine.h"
 #include "Word.h"
 
-RealMachine::RealMachine(): cpu(), memoryProxy(&memory), dataExchange(&memoryProxy) {
-    std::ofstream swapFile(SWAP_FILE, std::ofstream::out | std::ofstream::trunc);
-    if (swapFile.is_open()) {
-        for (int i = 0; i < SWAP_BLOCKS; ++i) {
-            for (int j = 0; j < BLOCK_SIZE; ++j) {
-                swapFile << "000000";
-
-                if (j < BLOCK_SIZE - 1) {
-                    swapFile << " ";
-                }
-            }
-            swapFile << "\n";
-        }
-
-        swapFile.close();
-    } else {
-        std::cerr << "Failed to create swap file." << std::endl;
-    }
-}
+RealMachine::RealMachine(): cpu(), memoryProxy(&memory), dataExchange(&memoryProxy), swapFile(SWAP_FILE, SWAP_BLOCKS) {}
 
 VirtualMachine RealMachine::loadProgram(const std::string &fileName) {
     newPageTable();
@@ -113,8 +95,22 @@ void RealMachine::newPageTable() {
     cpu.ptr = Word(pageTableBlockIndex); // set PTR to point on new page table
 
     for (int i = 0; i < VIRTUAL_MEMORY_BLOCKS; ++i) {
-        int randomBlock = memory.pickFreeBlockIndex();
-        memory.writeWord(Word(randomBlock), pageTableBlockIndex, i);
+        int block;
+        if (memory.hasFreeSpace())
+        {
+            block = memory.pickFreeBlockIndex();
+        }
+        else
+        {
+            int swapBlock = swapFile.allocateBlock();
+            if (swapBlock == -1) {
+                Logger::debug("Swap file is full!");
+                return;
+            }
+
+            block = swapBlock + RM_RAM_SIZE;
+        }
+        memory.writeWord(Word(block), pageTableBlockIndex, i);
     }
 
     memoryProxy.setPageTable(memory.getBlock(pageTableBlockIndex));

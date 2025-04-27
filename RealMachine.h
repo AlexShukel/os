@@ -13,6 +13,8 @@
 #include "DataExchange.h"
 #include "RAM.h"
 #include "VirtualMachine.h"
+#include "Swap.h"
+#include "Logger.h"
 
 class RealMachine {
 public:
@@ -20,6 +22,7 @@ public:
     RAM memory;
     MemoryProxy memoryProxy;
     DataExchange dataExchange;
+    SwapFile swapFile;
     std::vector<VirtualMachine> virtualMachines;
 
     RealMachine();
