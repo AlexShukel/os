@@ -32,6 +32,8 @@ public:
     MemoryBlock *getBlock(int index);
 
     int pickFreeBlockIndex();
+
+    bool hasFreeSpace();
 };
 
 

@@ -93,5 +93,43 @@ int DataExchange::xchg() {
         hdd.close();
         return 0;
     }
+
+    // Copy a block by index sourcePointer from SWAP to memory block by destinationPointer
+    if (sourceObject == SWAP) {
+        if (destinationObject == MEMORY) {
+            std::fstream swapFile(path);
+
+            int sourceBlock = sourcePointer.toInteger();
+            int destinationBlock = destinationPointer.toInteger();
+
+            Word currentWord;
+            for (int i = 0; i < BLOCK_SIZE; ++i) {
+                swapFile.seekg(sourceBlock * BLOCK_SIZE + i * WORD_SIZE, std::ios::beg);
+                swapFile.read(currentWord.word, WORD_SIZE);
+                memory->writeWord(currentWord, destinationBlock * BLOCK_SIZE + i * WORD_SIZE);
+            }
+
+            swapFile.close();
+        }
+    }
+
+    // Copy a block by index sourcePointer from memory to SWAP block by destinationPointer
+    if (sourceObject == MEMORY) {
+        if (destinationObject == SWAP) {
+            std::fstream swapFile(path);
+
+            int sourceBlock = sourcePointer.toInteger();
+            int destinationBlock = destinationPointer.toInteger();
+
+            for (int i = 0; i < BLOCK_SIZE; ++i) {
+                Word currentWord = memory->readWord(sourceBlock * BLOCK_SIZE + i * WORD_SIZE);
+
+                swapFile.seekg(destinationBlock * BLOCK_SIZE + i * WORD_SIZE, std::ios::beg);
+                swapFile.write(currentWord.word, WORD_SIZE);
+            }
+
+            swapFile.close();
+        }
+    }
 }
 

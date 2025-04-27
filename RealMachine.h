@@ -12,10 +12,12 @@
 #include "CPU.h"
 #include "DataExchange.h"
 #include "RAM.h"
+#include "Swap.h"
 #include "VirtualMachine.h"
 
 class RealMachine {
 public:
+    Swap swap;
     CPU cpu;
     RAM memory;
     MemoryProxy memoryProxy;

@@ -8,6 +8,8 @@
 #include <cstring>
 
 #include "RealMachine.h"
+
+#include "Logger.h"
 #include "Word.h"
 
 RealMachine::RealMachine(): cpu(), memoryProxy(&memory), dataExchange(&memoryProxy) {}
@@ -95,8 +97,15 @@ void RealMachine::newPageTable() {
     cpu.ptr = Word(pageTableBlockIndex); // set PTR to point on new page table
 
     for (int i = 0; i < VIRTUAL_MEMORY_BLOCKS; ++i) {
-        int randomBlock = memory.pickFreeBlockIndex();
-        memory.writeWord(Word(randomBlock), pageTableBlockIndex, i);
+        int allocatedBlock;
+        if (memory.hasFreeSpace()) {
+            allocatedBlock = memory.pickFreeBlockIndex();
+        } else {
+            allocatedBlock = RM_RAM_SIZE + swap.pickFreeBlockIndex(); // the index of swapped block will be greater than RM_RAM_SIZE
+            swap.printBlock(allocatedBlock - RM_RAM_SIZE);
+        }
+
+        memory.writeWord(Word(allocatedBlock), pageTableBlockIndex, i);
     }
 
     memoryProxy.setPageTable(memory.getBlock(pageTableBlockIndex));

@@ -7,7 +7,7 @@
 
 #include <cstdint>
 
-#define RM_RAM_SIZE 640 // 640 blocks
+#define RM_RAM_SIZE 256 // 640 blocks
 #define BLOCK_SIZE 256 // 256 words in a block
 #define WORD_SIZE 6 // 6 bytes in a word
 
@@ -18,5 +18,8 @@
 #define STACK_BEGIN 255
 
 using Byte = char;
+
+#define SWAP_FILE "swap.txt"
+#define SWAP_FILE_SIZE 1024
 
 #endif //SHARED_H
