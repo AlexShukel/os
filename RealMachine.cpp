@@ -20,7 +20,9 @@ VirtualMachine RealMachine::loadProgram(const std::string &fileName) {
     dataExchange.sourceObject = EXTERNAL;
     dataExchange.destinationObject = MEMORY;
 
-    dataExchange.xchg();
+    if (dataExchange.xchg() == -1) {
+        return VirtualMachine(nullptr);
+    }
 
     VirtualMachine vm(&memoryProxy);
     virtualMachines.push_back(vm);

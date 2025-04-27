@@ -3,6 +3,7 @@
 //
 
 #include "DataExchange.h"
+#include "Logger.h"
 
 #include <fstream>
 #include <iostream>
@@ -27,17 +28,18 @@ std::string readLine(std::ifstream& file) {
     return line;
 }
 
-void DataExchange::xchg() {
+int DataExchange::xchg() {
     if (destinationObject == EXTERNAL) {
-        throw std::runtime_error("DataExchange::xchg() called with dt set to EXTERNAL. Writing in external storage is not supported.");
+        Logger::debug("DataExchange::xchg() called with dt set to EXTERNAL. Writing in external storage is not supported.");
+        return -1;
     }
 
     if (sourceObject == EXTERNAL) {
         std::ifstream hdd("hdd.txt");
 
         if (!hdd) {
-            std::cerr << "ERROR: failed to open hdd.txt" << std::endl;
-            exit(1);
+            Logger::debug("ERROR: failed to open hdd.txt");
+            return -1;
         }
 
         if (destinationObject == MEMORY) {
@@ -53,14 +55,16 @@ void DataExchange::xchg() {
                 
                 line = readLine(hdd);
                 if (line != "@CODE0") {
-                    throw std::runtime_error("ERROR: no @CODE0 in " + path);
+                    Logger::debug("ERROR: no @CODE0 in %s", path.c_str());
+                    return -1;
                 }
                 line = readLine(hdd);
 
                 int currentWordIndex = CODE_SEGMENT_START_BLOCK;
                 while (line != "@DATA0") {
                     if (line.size() != WORD_SIZE) {
-                        throw std::runtime_error("ERROR: each line on external storage must contain exactly one word.");
+                        Logger::debug("ERROR: each line on external storage must contain exactly one word.");
+                        return -1;
                     }
 
                     memory->writeWord(Word(line), currentWordIndex);
@@ -73,7 +77,8 @@ void DataExchange::xchg() {
                 currentWordIndex = DATA_SEGMENT_START_BLOCK * BLOCK_SIZE;
                 while (line != "@END00") {
                     if (line.size() != WORD_SIZE) {
-                        throw std::runtime_error("ERROR: each line on external storage must contain exactly one word.");
+                        Logger::debug("ERROR: each line on external storage must contain exactly one word.");
+                        return -1;
                     }
     
                     memory->writeWord(Word(line), currentWordIndex);
@@ -86,6 +91,7 @@ void DataExchange::xchg() {
         }
 
         hdd.close();
+        return 0;
     }
 }
 
