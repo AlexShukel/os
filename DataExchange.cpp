@@ -91,7 +91,8 @@ int DataExchange::xchg() {
         }
 
         hdd.close();
-        return 0;
     }
+
+    return 0;
 }
 

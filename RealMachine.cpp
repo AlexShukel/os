@@ -10,7 +10,25 @@
 #include "RealMachine.h"
 #include "Word.h"
 
-RealMachine::RealMachine(): cpu(), memoryProxy(&memory), dataExchange(&memoryProxy) {}
+RealMachine::RealMachine(): cpu(), memoryProxy(&memory), dataExchange(&memoryProxy) {
+    std::ofstream swapFile(SWAP_FILE, std::ofstream::out | std::ofstream::trunc);
+    if (swapFile.is_open()) {
+        for (int i = 0; i < SWAP_BLOCKS; ++i) {
+            for (int j = 0; j < BLOCK_SIZE; ++j) {
+                swapFile << "000000";
+
+                if (j < BLOCK_SIZE - 1) {
+                    swapFile << " ";
+                }
+            }
+            swapFile << "\n";
+        }
+
+        swapFile.close();
+    } else {
+        std::cerr << "Failed to create swap file." << std::endl;
+    }
+}
 
 VirtualMachine RealMachine::loadProgram(const std::string &fileName) {
     newPageTable();

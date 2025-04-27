@@ -17,6 +17,10 @@
 #define DATA_SEGMENT_START_BLOCK 16
 #define STACK_BEGIN 255
 
+// Swap file
+#define SWAP_FILE "swap.txt"
+#define SWAP_BLOCKS 1024
+
 using Byte = char;
 
 #endif //SHARED_H
