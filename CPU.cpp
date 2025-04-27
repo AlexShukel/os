@@ -135,22 +135,18 @@ int CPU::exec(VirtualMachine& virtualMachine) {
         Word& target = virtualMachine.popFromStack();
         virtualMachine.memory->writeWord(target, address.toInteger());
     } else if (command.equals("GETD00")) {
-        Word& address = virtualMachine.popFromStack();
-        Word& size = virtualMachine.popFromStack();
-        std::string buffer;
-        std::getline(std::cin, buffer);
-
-        for (int i = 0; i < size.toInteger(); ++i) {
-            virtualMachine.memory->writeWord(Word(buffer.substr(i * WORD_SIZE, WORD_SIZE)), address.toInteger());
-        }
-
-        Logger::debug("GETD00: %.6s", address.word);
+        signalSupervisorInterrupt(virtualMachine, SupervisorInterrupt::GETD);
+        processInterrupt();
     } else if (command.equals("PRTW00")) {
-        Word& arg = virtualMachine.popFromStack();
-        std::cout << arg << std::endl;
+        signalSupervisorInterrupt(virtualMachine, SupervisorInterrupt::PRTW);
+        processInterrupt();
     } else if (command.equals("PRTS00")) {
+        signalSupervisorInterrupt(virtualMachine, SupervisorInterrupt::PRTS);
+        processInterrupt();
     } else if (command.equals("HALT00")) {
-        return -1;
+        signalSupervisorInterrupt(virtualMachine, SupervisorInterrupt::HALT);
+        processInterrupt();
+        return -1; // TODO: handle HALT in interrupt
     } else {
         Logger::debug("Unknown instruction: %.6s", command.word);
         return -1;
@@ -160,4 +156,118 @@ int CPU::exec(VirtualMachine& virtualMachine) {
         ++virtualMachine.pc;
     }
     return 0;
+}
+
+void CPU::signalInterrupt(VirtualMachine& virtualMachine, Byte interrupt, InterruptType type) {
+    Interrupt newInterrupt{virtualMachine, interrupt, type};
+    interrupts.push(newInterrupt);
+}
+
+void CPU::signalProgramInterrupt(VirtualMachine& virtualMachine, const ProgramInterrupt& interrupt) {
+    pi = static_cast<Byte>(interrupt);
+    signalInterrupt(virtualMachine, pi, InterruptType::PROGRAM);
+}
+
+void CPU::signalSupervisorInterrupt(VirtualMachine& virtualMachine, const SupervisorInterrupt& interrupt) {
+    si = static_cast<Byte>(interrupt);
+    signalInterrupt(virtualMachine, si, InterruptType::SUPERVISOR);
+}
+
+void CPU::processInterrupt() {
+    if (interrupts.empty()) {
+        return;
+    }
+
+    Interrupt interrupt = interrupts.front();
+    interrupts.pop();
+
+    if (interrupt.type == InterruptType::PROGRAM) {
+        pi = interrupt.interrupt;
+        processProgramInterrupt(interrupt.virtualMachine);
+
+    } else if (interrupt.type == InterruptType::SUPERVISOR) {
+        si = interrupt.interrupt;
+        processSupervisorInterrupt(interrupt.virtualMachine);
+    }
+}
+
+void CPU::processProgramInterrupt(VirtualMachine& virtualMachine) {
+    ProgramInterrupt interrupt = static_cast<ProgramInterrupt>(pi);
+    
+    switch (interrupt) {
+        case ProgramInterrupt::BADCODE:
+        {
+            Logger::debug("Bad code exception");
+            break;
+        }
+        case ProgramInterrupt::SEGFAULT:
+        {
+            Logger::debug("Segmentation fault exception");
+            break;
+        }
+        case ProgramInterrupt::OVERFLOW:
+        {
+            Logger::debug("Overflow exception");
+            break;
+        }
+        case ProgramInterrupt::ZERODIV:
+        {
+            Logger::debug("Division by zero exception");
+            break;
+        }
+        case ProgramInterrupt::BADNUM:
+        {
+            Logger::debug("Bad number exception");
+            break;
+        }
+        default:
+        {
+            Logger::debug("Unknown program interrupt");
+            break;
+        }
+    }
+}
+
+void CPU::processSupervisorInterrupt(VirtualMachine& virtualMachine) {
+    SupervisorInterrupt interrupt = static_cast<SupervisorInterrupt>(si);
+    
+    switch (interrupt) {
+        case SupervisorInterrupt::GETD:
+        {
+            Logger::debug("GETD supervisor interrupt");
+            Word& size = virtualMachine.popFromStack();
+            Word& address = virtualMachine.popFromStack();
+            std::string buffer;
+            std::getline(std::cin, buffer);
+
+            for (int i = 0; i < size.toInteger(); ++i) {
+                virtualMachine.memory->writeWord(Word(buffer.substr(i * WORD_SIZE, WORD_SIZE)), address.toInteger());
+            }
+
+            Logger::debug("GETD00: %.6s", address.word);
+            break;
+        }
+        case SupervisorInterrupt::PRTW:
+        {
+            Logger::debug("PRTW supervisor interrupt");
+            Word& arg = virtualMachine.popFromStack();
+            std::cout << arg << std::endl;
+            break;
+        }
+        case SupervisorInterrupt::PRTS:
+        {
+            Logger::debug("PRTS supervisor interrupt");
+            break;
+        }
+        case SupervisorInterrupt::HALT:
+        {
+            Logger::debug("HALT supervisor interrupt");
+            break;
+        }
+        default:
+        {
+            Logger::debug("Unknown supervisor interrupt");
+            break;
+        }
+    }
 }
