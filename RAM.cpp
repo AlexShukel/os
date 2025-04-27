@@ -31,7 +31,9 @@ int RAM::pickFreeBlockIndex() {
     static std::mt19937 rng(static_cast<unsigned int>(std::time(nullptr)));
     std::uniform_int_distribution<size_t> dist(0, freeIndices.size() - 1);
 
-    return freeIndices[dist(rng)];
+    int idx = freeIndices[dist(rng)];
+    free[idx] = false;
+    return idx;
 }
 
 void RAM::writeWord(Word word, int block, int index) {
@@ -42,7 +44,6 @@ void RAM::writeWord(Word word, int block, int index) {
 Word& RAM::readWord(int block, int index) {
     return blocks[block].data[index];
 }
-
 
 void RAM::printBlock(int block) {
     for (int i = 0; i < BLOCK_SIZE; i++) {
@@ -55,3 +56,11 @@ MemoryBlock *RAM::getBlock(int index) {
     return &blocks[index];
 }
 
+bool RAM::hasFreeSpace() {
+    for (const bool &i : free) {
+        if (i) {
+            return true;
+        }
+    }
+    return false;
+}

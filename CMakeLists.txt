@@ -8,6 +8,11 @@ file(GLOB SOURCES
     "*.h"
 )
 
-add_executable(OS2025 ${SOURCES})
+add_executable(OS2025 ${SOURCES}
+        Interrupt.cpp
+        Interrupt.h
+        Swap.cpp
+        Swap.h
+)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/hdd.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

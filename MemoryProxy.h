@@ -5,15 +5,16 @@
 #ifndef MEMORYPROXY_H
 #define MEMORYPROXY_H
 #include "RAM.h"
-
+#include "Swap.h"
 
 
 class MemoryProxy {
     RAM *ram;
     MemoryBlock *pageTable;
+    Swap *swap;
 
 public:
-    explicit MemoryProxy(RAM *ram);
+    explicit MemoryProxy(RAM *ram, Swap *swap);
 
     void writeWord(Word word, const int& address);
 
