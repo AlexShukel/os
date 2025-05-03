@@ -1,8 +1,7 @@
 import java.util.Arrays;
 
 public class Word {
-    public static final int WORD_SIZE = 6;
-    private final char[] word = new char[WORD_SIZE];
+    private final char[] word = new char[Constants.WORD_SIZE];
 
     public Word() {
         Arrays.fill(word, '0');
@@ -16,7 +15,7 @@ public class Word {
         this();
 
         if (isNumber(str)) {
-            for (int i = 0; i < WORD_SIZE; i++) {
+            for (int i = 0; i < Constants.WORD_SIZE; i++) {
                 word[i] = str.charAt(i);
             }
         }
@@ -24,13 +23,13 @@ public class Word {
 
     private void saveInHex(int n) {
         String hex = String.format("%06X", n & 0xFFFFFF);  // limit to 24 bits
-        for (int i = 0; i < WORD_SIZE; i++) {
+        for (int i = 0; i < Constants.WORD_SIZE; i++) {
             word[i] = hex.charAt(i);
         }
     }
 
     private boolean isNumber(String str) {
-        if (str == null || str.length() != WORD_SIZE) {
+        if (str == null || str.length() != Constants.WORD_SIZE) {
             return false;
         }
 
@@ -56,7 +55,7 @@ public class Word {
     }
 
     public String substring(int index) {
-        if (index < 0 || index >= WORD_SIZE) {
+        if (index < 0 || index >= Constants.WORD_SIZE) {
             Logger.debug("Word.substring: Invalid index: " + index);
         }
         return new String(word).substring(index);
