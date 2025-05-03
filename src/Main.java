@@ -57,6 +57,9 @@ public class Main {
                         }
                         String runPath = arguments.get(0);
                         System.out.println("run command " + runPath);
+                        Logger.debug("test1");
+                        Logger.debug("test %d", 4);
+                        Logger.debug("test %s", "test");
 //                        VirtualMachine vmRun = realMachine.loadProgram(runPath);
 //
 //                        if (vmRun.memory == null) {

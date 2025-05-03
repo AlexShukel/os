@@ -57,7 +57,7 @@ public class Word {
 
     public String substring(int index) {
         if (index < 0 || index >= WORD_SIZE) {
-            // Logger.debug("Word.substring: Invalid index: " + index);
+            Logger.debug("Word.substring: Invalid index: " + index);
         }
         return new String(word).substring(index);
     }
