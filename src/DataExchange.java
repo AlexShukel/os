@@ -66,10 +66,8 @@ public class DataExchange {
                         line = readLine(hdd);
                     }
 
-                    break;
+                    return 0;
                 }
-
-                return 0;
 
             } catch (IOException e) {
                 Logger.debug("ERROR: failed to open hdd.txt");

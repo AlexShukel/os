@@ -19,7 +19,7 @@ public class RealMachine {
         dataExchange.destinationObject = MemoryObject.MEMORY;
 
         if (dataExchange.xchg() == -1) {
-            return new VirtualMachine(null);
+            return null;
         }
 
         VirtualMachine vm = new VirtualMachine(memoryProxy);

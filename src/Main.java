@@ -59,7 +59,7 @@ public class Main {
                         String runPath = arguments.getFirst();
                         VirtualMachine vmRun = realMachine.loadProgram(runPath);
 
-                        if (vmRun.memory == null) {
+                        if (vmRun == null) {
                             System.err.println("Failed to load program from " + runPath);
                             break;
                         }
@@ -76,7 +76,7 @@ public class Main {
                         String debugPath = arguments.getFirst();
                         VirtualMachine vmDebug = realMachine.loadProgram(debugPath);
 
-                        if (vmDebug.memory == null) {
+                        if (vmDebug == null) {
                             System.err.println("Failed to load program from " + debugPath);
                             break;
                         }

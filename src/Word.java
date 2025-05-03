@@ -12,9 +12,9 @@ public class Word {
     }
 
     public Word(String str) {
-        this();
-
-        if (isNumber(str)) {
+        if (str.length() > Constants.WORD_SIZE) {
+            Arrays.fill(word, '0');
+        } else {
             for (int i = 0; i < Constants.WORD_SIZE; i++) {
                 word[i] = str.charAt(i);
             }
@@ -26,20 +26,6 @@ public class Word {
         for (int i = 0; i < Constants.WORD_SIZE; i++) {
             word[i] = hex.charAt(i);
         }
-    }
-
-    private boolean isNumber(String str) {
-        if (str == null || str.length() != Constants.WORD_SIZE) {
-            return false;
-        }
-
-        for (char c : str.toCharArray()) {
-            if (!Character.isDigit(c) && (c < 'A' || c > 'F')) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     public int toInteger() {
