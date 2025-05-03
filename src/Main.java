@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -22,9 +23,9 @@ public class Main {
         System.out.println("      <path> is a string representing the path to the input file.\n");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
-        // RealMachine realMachine = new RealMachine();
+        RealMachine realMachine = new RealMachine();
 
         while (true) {
             String line = scanner.nextLine();
@@ -38,7 +39,7 @@ public class Main {
             }
 
             if (!tokens.isEmpty()) {
-                String command = tokens.get(0);
+                String command = tokens.getFirst();
                 List<String> arguments = tokens.subList(1, tokens.size());
 
                 switch (command) {
@@ -55,19 +56,15 @@ public class Main {
                             System.err.println("Missing path argument for 'run'");
                             break;
                         }
-                        String runPath = arguments.get(0);
-                        System.out.println("run command " + runPath);
-                        Logger.debug("test1");
-                        Logger.debug("test %d", 4);
-                        Logger.debug("test %s", "test");
-//                        VirtualMachine vmRun = realMachine.loadProgram(runPath);
-//
-//                        if (vmRun.memory == null) {
-//                            System.err.println("Failed to load program from " + runPath);
-//                            break;
-//                        }
-//
-//                        realMachine.runProgram(vmRun);
+                        String runPath = arguments.getFirst();
+                        VirtualMachine vmRun = realMachine.loadProgram(runPath);
+
+                        if (vmRun.memory == null) {
+                            System.err.println("Failed to load program from " + runPath);
+                            break;
+                        }
+
+                        realMachine.runProgram(vmRun);
                         break;
 
                     case "debug":
@@ -76,16 +73,15 @@ public class Main {
                             break;
                         }
 
-                        String debugPath = arguments.get(0);
-                        System.out.println("debug command " + debugPath);
-//                        VirtualMachine vmDebug = realMachine.loadProgram(debugPath);
-//
-//                        if (vmDebug.memory == null) {
-//                            System.err.println("Failed to load program from " + debugPath);
-//                            break;
-//                        }
-//
-//                        realMachine.debugProgram(vmDebug);
+                        String debugPath = arguments.getFirst();
+                        VirtualMachine vmDebug = realMachine.loadProgram(debugPath);
+
+                        if (vmDebug.memory == null) {
+                            System.err.println("Failed to load program from " + debugPath);
+                            break;
+                        }
+
+                        realMachine.debugProgram(vmDebug);
                         break;
 
                     default:

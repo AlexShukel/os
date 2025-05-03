@@ -29,6 +29,14 @@ public class CPU {
 
     private final Queue<Interrupt> interrupts = new LinkedList<>();
 
+    public Word getPtr() {
+        return ptr;
+    }
+
+    public void setPtr(Word word) {
+        ptr = word;
+    }
+
     public int exec(VirtualMachine vm) {
         int commandAddress = vm.pc.toInteger();
         Word command = vm.memory.readWord(commandAddress);
