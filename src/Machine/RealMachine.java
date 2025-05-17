@@ -1,4 +1,4 @@
-// RealMachine.java
+package Machine;// Machine.RealMachine.java
 
 import java.util.*;
 import java.io.*;
@@ -13,7 +13,7 @@ public class RealMachine {
     public VirtualMachine loadProgram(String fileName) {
         newPageTable();
 
-        // DataExchange will copy from hdd.txt all program's parts on the fly
+        // Machine.DataExchange will copy from hdd.txt all program's parts on the fly
         dataExchange.path = fileName;
         dataExchange.sourceObject = MemoryObject.EXTERNAL;
         dataExchange.destinationObject = MemoryObject.MEMORY;

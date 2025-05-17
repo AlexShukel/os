@@ -1,3 +1,7 @@
+package Machine;
+
+import utils.Logger;
+
 import java.io.*;
 
 public class DataExchange {
@@ -18,7 +22,7 @@ public class DataExchange {
 
     public int xchg() {
         if (destinationObject == MemoryObject.EXTERNAL) {
-            Logger.debug("DataExchange::xchg() called with destination set to EXTERNAL. Writing in external storage is not supported.");
+            Logger.debug("Machine.DataExchange::xchg() called with destination set to EXTERNAL. Writing in external storage is not supported.");
             return -1;
         }
 

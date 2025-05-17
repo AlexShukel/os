@@ -1,3 +1,7 @@
+package Machine;
+
+import utils.Logger;
+
 import java.util.Arrays;
 
 public class Word {
@@ -42,7 +46,7 @@ public class Word {
 
     public String substring(int index) {
         if (index < 0 || index >= Constants.WORD_SIZE) {
-            Logger.debug("Word.substring: Invalid index: " + index);
+            Logger.debug("Machine.Word.substring: Invalid index: " + index);
         }
         return new String(word).substring(index);
     }

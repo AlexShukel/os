@@ -1,3 +1,5 @@
+package Machine;
+
 public enum MemoryObject {
     MEMORY,
     SUPERVISOR,

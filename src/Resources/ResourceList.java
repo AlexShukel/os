@@ -1,12 +1,12 @@
+package Resources;
+
 import java.util.ArrayList;
 
 public class ResourceList {
-    private Kernel kernel;
     private ArrayList<Resource> resources;
 
-    public ResourceList(Kernel kernel)
+    public ResourceList()
     {
-        this.kernel = kernel;
         resources = new ArrayList<>();
     }
 

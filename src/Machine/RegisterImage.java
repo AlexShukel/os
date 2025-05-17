@@ -1,3 +1,5 @@
+package Machine;
+
 public class RegisterImage {
     private Word ptr = new Word(0);
     private byte c = 0;

@@ -1,3 +1,5 @@
+package Machine;
+
 public class MemoryBlock {
     public final Word[] data = new Word[Constants.BLOCK_SIZE];
 

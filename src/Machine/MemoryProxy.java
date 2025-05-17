@@ -1,3 +1,5 @@
+package Machine;
+
 public class MemoryProxy {
     private final RAM ram;
     private MemoryBlock pageTable;
