@@ -92,11 +92,16 @@ public class ProcessManager {
         }
     }
 
-    public void ExecutePlanner()
+    public int ExecutePlanner()
     {
         if (currentRunProcess.GetState() == ProcessState.BLOCK)
         {
             blockedProcesses.add(currentRunProcess);
+        }
+
+        if (readyProcesses.isEmpty()) {
+            Logger.debug("No ready processes");
+            return -1;
         }
 
         currentRunProcess = readyProcesses.poll();
@@ -112,5 +117,7 @@ public class ProcessManager {
             currentRunProcess.SetState(ProcessState.READY);
             readyProcesses.add(currentRunProcess);
         }
+
+        return 0;
     }
 }

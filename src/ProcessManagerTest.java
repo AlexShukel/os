@@ -1,5 +1,6 @@
 import Machine.RealMachine;
 import Processes.ProcessManager;
+import utils.Logger;
 
 public class ProcessManagerTest {
     public static void main(String[] args)
@@ -8,7 +9,12 @@ public class ProcessManagerTest {
         ProcessManager processManager = new ProcessManager(realMachine);
 
         while (true) {
-            processManager.ExecutePlanner();
+            int result = processManager.ExecutePlanner();
+
+            if (result == -1) {
+                Logger.debug("Terminating");
+                break;
+            }
         }
     }
 }

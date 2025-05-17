@@ -12,17 +12,22 @@ public abstract class Process {
 
     public abstract void Step();
 
+    public void CreateProcess(Process process, String userName, int priority)
+    {
+        manager.CreateProcess(process, descriptor, userName, priority);
+    }
+
+    public void RemoveProcess(Process process)
+    {
+        manager.RemoveProcess(process.GetDescriptor());
+    }
+
     public void CompleteWork() {
         endedWork = true;
     }
 
     public boolean EndedWork() {
         return endedWork;
-    }
-
-    public void CreateProcess(Process process, String userName, int priority)
-    {
-        manager.CreateProcess(process, descriptor, userName, priority);
     }
 
     public ProcessManager GetProcessManager()
@@ -33,5 +38,10 @@ public abstract class Process {
     public void SetDescriptor(ProcessDescriptor descriptor)
     {
         this.descriptor = descriptor;
+    }
+
+    public ProcessDescriptor GetDescriptor()
+    {
+        return descriptor;
     }
 }
