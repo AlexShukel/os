@@ -1,3 +1,5 @@
+import utils.Logger;
+
 import java.util.Arrays;
 
 public class Word {
