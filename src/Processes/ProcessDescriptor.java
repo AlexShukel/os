@@ -29,20 +29,16 @@ public class ProcessDescriptor {
     public ProcessDescriptor(Process process, CPU cpu, String userName, int priority)
     {
         this.cpu = cpu;
+        this.priority = priority;
+        this.userName = userName;
+        this.process = process;
+        this.process.SetDescriptor(this);
 
         registerImage = new RegisterImage();
         state = ProcessState.READY;
 
         parent = null;
         children = new ArrayList<>();
-
-        // createdResources = new Resources.ResourceList(kernel);
-        // ownedResources = null;
-
-        this.priority = priority;
-        this.userName = userName;
-        this.process = process;
-        this.process.SetDescriptor(this);
     }
 
     public void Run()
@@ -101,16 +97,6 @@ public class ProcessDescriptor {
     public void SetId(int id)
     {
         this.id = id;
-    }
-
-    public int GetId()
-    {
-        return id;
-    }
-
-    public String GetUserName()
-    {
-        return userName;
     }
 
     public int GetPriority()
