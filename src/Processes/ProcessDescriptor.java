@@ -42,6 +42,7 @@ public class ProcessDescriptor {
         this.priority = priority;
         this.userName = userName;
         this.process = process;
+        this.process.SetDescriptor(this);
     }
 
     public void Run()
@@ -52,11 +53,11 @@ public class ProcessDescriptor {
             return;
         }
 
-        while (!process.EndedWork()) {
+        int currentTicks = 0;
+        while (!process.EndedWork() && currentTicks < maxTicks) {
             process.Step();
 
-            if (process.GetTick() % (maxTicks + 1) == maxTicks)
-                break;
+            ++currentTicks;
         }
     }
 

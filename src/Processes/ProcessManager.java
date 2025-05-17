@@ -27,15 +27,13 @@ public class ProcessManager {
                 (a, b) -> Integer.compare(b.GetPriority(), a.GetPriority())
         );
 
-        WhileTrue whileTrueProcess = new WhileTrue();
-        ProcessDescriptor descriptor = new ProcessDescriptor(whileTrueProcess, realMachine.cpu, "WhileTrue", 0);
+        StartStop startStop = new StartStop(this);
+        ProcessDescriptor descriptor = CreateProcess(startStop, null, "StartStop", 1);
         descriptor.SetState(ProcessState.RUN);
-        processes.add(descriptor);
-        readyProcesses.add(descriptor);
         currentRunProcess = descriptor;
     }
 
-    public void CreateProcess(Process process, ProcessDescriptor creator, String userName, int priority)
+    public ProcessDescriptor CreateProcess(Process process, ProcessDescriptor creator, String userName, int priority)
     {
         ProcessDescriptor descriptor = new ProcessDescriptor(process, realMachine.cpu, userName, priority);
 
@@ -50,8 +48,9 @@ public class ProcessManager {
         processes.add(descriptor);
 
         Logger.debug("Created process " + descriptor);
-        descriptor.SetState(ProcessState.READY);
         readyProcesses.add(descriptor);
+
+        return descriptor;
     }
 
     public void RemoveProcess(ProcessDescriptor process)
@@ -100,13 +99,18 @@ public class ProcessManager {
             blockedProcesses.add(currentRunProcess);
         }
 
-        currentRunProcess = readyProcesses.peek();
+        currentRunProcess = readyProcesses.poll();
         currentRunProcess.SetState(ProcessState.RUN);
         currentRunProcess.Run();
 
         if (currentRunProcess.Completed())
         {
             RemoveProcess(currentRunProcess);
+        }
+        else
+        {
+            currentRunProcess.SetState(ProcessState.READY);
+            readyProcesses.add(currentRunProcess);
         }
     }
 }
