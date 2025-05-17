@@ -1,12 +1,12 @@
+package Processes;
+
 import java.util.ArrayList;
 
 public class ProcessList {
-    private Kernel kernel;
     private ArrayList<ProcessDescriptor> processes;
 
-    public ProcessList(Kernel kernel)
+    public ProcessList()
     {
-        this.kernel = kernel;
         processes = new ArrayList<>();
     }
 

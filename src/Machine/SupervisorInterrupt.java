@@ -1,3 +1,5 @@
+package Machine;
+
 public enum SupervisorInterrupt {
     NONE(0),
     GETD(1),

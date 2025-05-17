@@ -1,3 +1,5 @@
+import Machine.RealMachine;
+import Processes.ProcessManager;
 import Processes.TestProcess;
 
 public class ProcessManagerTest {

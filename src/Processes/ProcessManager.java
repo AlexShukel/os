@@ -1,6 +1,8 @@
-import Processes.Process;
-import Processes.WhileTrue;
+package Processes;
+
+import Machine.RealMachine;
 import utils.Logger;
+import Resources.Resource;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;

@@ -1,5 +1,8 @@
-import Processes.Process;
+package Processes;
+
+import Machine.*;
 import utils.Logger;
+import Resources.*;
 
 import java.util.ArrayList;
 
@@ -21,6 +24,7 @@ public class ProcessDescriptor {
     private int stackSize;
 
     private Process process;
+    private final int maxTicks = 10;
 
     public ProcessDescriptor(Process process, CPU cpu, String userName, int priority)
     {
@@ -32,14 +36,11 @@ public class ProcessDescriptor {
         parent = null;
         children = new ArrayList<>();
 
-        // createdResources = new ResourceList(kernel);
+        // createdResources = new Resources.ResourceList(kernel);
         // ownedResources = null;
 
         this.priority = priority;
         this.userName = userName;
-
-        // TODO: set id
-        id = 0;
         this.process = process;
     }
 
@@ -54,7 +55,7 @@ public class ProcessDescriptor {
         while (!process.EndedWork()) {
             process.Step();
 
-            if (process.GetTick() % 11 == 10)
+            if (process.GetTick() % (maxTicks + 1) == maxTicks)
                 break;
         }
     }

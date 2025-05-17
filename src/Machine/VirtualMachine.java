@@ -1,3 +1,5 @@
+package Machine;
+
 public class VirtualMachine {
     public static final byte CF = 0b00000001;
     public static final byte ZF = 0b00000010;

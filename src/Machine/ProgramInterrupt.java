@@ -1,3 +1,5 @@
+package Machine;
+
 public enum ProgramInterrupt {
     NONE(0),
     BADCODE(1),

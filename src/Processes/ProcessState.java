@@ -1,3 +1,5 @@
+package Processes;
+
 public enum ProcessState {
     RUN("run"),
     READY("ready"),
