@@ -9,7 +9,6 @@ public class StartStop extends Process {
     private JobToSwap jobToSwap;
     private MainProc mainProc;
     private Loader loader;
-    private JobGorvernor jobGorvernor;
     private Interrupt interrupt;
     private PrintLine printLine;
 
@@ -41,9 +40,6 @@ public class StartStop extends Process {
                 loader = new Loader(GetProcessManager());
                 CreateProcess(loader, "Loader", 6);
 
-                jobGorvernor = new JobGorvernor(GetProcessManager());
-                CreateProcess(jobGorvernor, "JobGorvernor", 7);
-
                 interrupt = new Interrupt(GetProcessManager());
                 CreateProcess(interrupt, "Interrupt", 8);
 
@@ -59,7 +55,6 @@ public class StartStop extends Process {
                 RemoveProcess(jobToSwap);
                 RemoveProcess(mainProc);
                 RemoveProcess(loader);
-                RemoveProcess(jobGorvernor);
                 RemoveProcess(interrupt);
                 RemoveProcess(printLine);
                 break;
