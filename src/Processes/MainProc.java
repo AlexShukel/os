@@ -1,8 +1,10 @@
 package Processes;
 
+import Resources.ResourceManager;
+
 public class MainProc extends Process {
-    public MainProc(ProcessManager manager) {
-        super(manager);
+    public MainProc(ProcessManager processManager, ResourceManager resourceManager) {
+        super(processManager, resourceManager);
     }
 
     @Override

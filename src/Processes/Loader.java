@@ -1,9 +1,11 @@
 package Processes;
 
+import Resources.ResourceManager;
+
 public class Loader extends Process {
 
-    public Loader(ProcessManager manager) {
-        super(manager);
+    public Loader(ProcessManager processManager, ResourceManager resourceManager) {
+        super(processManager, resourceManager);
     }
 
     @Override
