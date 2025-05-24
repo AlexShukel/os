@@ -1,10 +1,9 @@
 package Processes;
 
-import Resources.Element;
-import Resources.Resource;
-import Resources.ResourceManager;
-import Resources.ResourceName;
+import Resources.*;
 import utils.Logger;
+
+import java.util.ArrayList;
 
 public class ReadFromInterface extends Process {
     private int executionStep = 1;
@@ -16,17 +15,23 @@ public class ReadFromInterface extends Process {
     }
 
     private String getUserInput() {
-        Resource resource = resourceManager.getResourceByName(ResourceName.IS_VARTOTOJO_SASAJOS.name());
+        Resource resource = resourceManager.getFirstResourceByDescriptor(new IS_VARTOTOJO_SASAJOS());
         Element element = resource.getElements().get(0);
         return (String) element.getData();
     }
 
     @Override
     public void execute() {
+        Resource resource;
+        ArrayList<Element> elements;
         switch (executionStep) {
             case 1:
                 Logger.debug("ReadFromInterface: Step 1 - Block waiting for 'From user interface' resource");
-                resourceManager.requestResource(resourceManager.getResourceByName(ResourceName.IS_VARTOTOJO_SASAJOS.name()), this);
+                Resource fromUserInterface = resourceManager.getFirstResourceByDescriptor(new IS_VARTOTOJO_SASAJOS());
+                if (fromUserInterface != null) {
+                    resourceManager.removeResource(fromUserInterface);
+                }
+                resourceManager.requestResource(new IS_VARTOTOJO_SASAJOS(), this);
                 ++executionStep;
                 break;
             case 2:
@@ -39,7 +44,8 @@ public class ReadFromInterface extends Process {
                 break;
             case 3:
                 Logger.debug("ReadFromInterface: Step 3 - Release 'MOS end' resource");
-                resourceManager.releaseResource(resourceManager.getResourceByName(ResourceName.MOS_PABAIGA.name()));
+                resourceManager.releaseResource(resourceManager.getFirstOrNewResourceByDescriptor(new MOS_PABAIGA(), this));
+                executionStep = 1;
                 break;
             case 4:
                 Logger.debug("ReadFromInterface: Step 4 - Check if command is 'help'");
@@ -51,7 +57,10 @@ public class ReadFromInterface extends Process {
                 break;
             case 5:
                 Logger.debug("ReadFromInterface: Step 5 - Release line resource with usage instructions");
-                resourceManager.releaseResource(resourceManager.getResourceByName(ResourceName.EILUTE_ATMINTYJE.name()));
+                resource = resourceManager.getFirstOrNewResourceByDescriptor(new EILUTE_ATMINTYJE(), this);
+                elements = getHelpMessageElements();
+                resource.setElements(elements);
+                resourceManager.releaseResource(resource);
                 executionStep = 1;
                 break;
             case 6:
@@ -72,7 +81,10 @@ public class ReadFromInterface extends Process {
                 break;
             case 8:
                 Logger.debug("ReadFromInterface: Step 8 - Release line resource with unknown command message");
-                resourceManager.releaseResource(resourceManager.getResourceByName(ResourceName.EILUTE_ATMINTYJE.name()));
+                resource = resourceManager.getFirstOrNewResourceByDescriptor(new EILUTE_ATMINTYJE(), this);
+                elements = getSingleMessageElements("Unknown command received.");
+                resource.setElements(elements);
+                resourceManager.releaseResource(resource);
                 executionStep = 1;
                 break;
             case 9:
@@ -92,7 +104,34 @@ public class ReadFromInterface extends Process {
                 finish();
                 break;
         }
+    }
 
-        ++executionStep;
+    private ArrayList<Element> getSingleMessageElements(String message) {
+        Element element = new Element(message, ElementType.STRING);
+        ArrayList<Element> elements = new ArrayList<>();
+        elements.add(element);
+        return elements;
+    }
+
+    private ArrayList<Element> getHelpMessageElements() {
+        String helpMessage = """
+                Available commands:
+                
+                  help
+                      Display this help message.
+                
+                  exit
+                      Exit the program.
+                
+                  run <path>
+                      Load and execute the program from the specified input file.
+                      <path> is a string representing the path to the input file.
+                
+                  debug <path>
+                      Load the program from the specified input file and start it in debug mode.
+                      <path> is a string representing the path to the input file.
+                """;
+
+        return getSingleMessageElements(helpMessage);
     }
 }

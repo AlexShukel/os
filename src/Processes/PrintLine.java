@@ -1,7 +1,6 @@
 package Processes;
 
-import Resources.ResourceManager;
-import Resources.ResourceName;
+import Resources.*;
 import utils.Logger;
 
 public class PrintLine extends Process {
@@ -18,12 +17,20 @@ public class PrintLine extends Process {
         switch (executionStep) {
             case 1:
                 Logger.debug("PrintLine: Step 1 - Block waiting for 'Line in memory' resource");
-                resourceManager.requestResource(resourceManager.getResourceByName(ResourceName.EILUTE_ATMINTYJE.name()), this);
+                Resource lineInMemory = resourceManager.getFirstResourceByDescriptor(new EILUTE_ATMINTYJE());
+                if (lineInMemory != null) {
+                    resourceManager.removeResource(lineInMemory);
+                }
+                resourceManager.requestResource(new EILUTE_ATMINTYJE(), this);
                 ++executionStep;
                 break;
             case 2:
                 Logger.debug("PrintLine: Step 2 - Block waiting for 'Channel device' resource");
-                resourceManager.requestResource(resourceManager.getResourceByName(ResourceName.KANALU_IRENGINYS.name()), this);
+
+                // DEBUG
+                Resource resource = resourceManager.getFirstResourceByDescriptor(new EILUTE_ATMINTYJE());
+
+                resourceManager.requestResource(new KANALU_IRENGINYS(), this);
                 ++executionStep;
                 break;
             case 3:
@@ -34,7 +41,5 @@ public class PrintLine extends Process {
                 finish();
                 break;
         }
-
-        ++executionStep;
     }
 }
