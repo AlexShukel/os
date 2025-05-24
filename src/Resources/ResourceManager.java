@@ -14,14 +14,25 @@ public class ResourceManager {
         this.processManager = processManager;
     }
 
-    public Resource getResourceByName(String name) {
+    public Resource getFirstResourceByDescriptor(ResourceDescriptor descriptor) {
         for (Resource resource : resources) {
-            if (resource.getName().equals(name)) {
+            if (resource.getName().equals(descriptor.getName())) {
                 return resource;
             }
         }
 
         return null;
+    }
+
+    public Resource getFirstOrNewResourceByDescriptor(ResourceDescriptor descriptor, Process creator) {
+        Resource resource = getFirstResourceByDescriptor(descriptor);
+
+        if (resource == null) {
+            resource = new Resource(descriptor, creator);
+            addResource(resource, creator);
+        }
+
+        return resource;
     }
 
     public void addResource(Resource resource, Process parent) {
@@ -33,13 +44,19 @@ public class ResourceManager {
         resources.remove(resource);
     }
 
-    public void requestResource(Resource resource, Process requester) {
-        resource.addWaitingProcess(requester);
-        processManager.blockProcess(requester);
+    public Resource requestResource(ResourceDescriptor descriptor, Process requester) {
+        Resource resource = getFirstResourceByDescriptor(descriptor);
+        if (resource == null) {
+            descriptor.addWaitingProcess(requester);
+            processManager.blockProcess(requester);
+        } else {
+            // TODO
+        }
+        return resource;
     }
 
     public void releaseResource(Resource resource) {
-        Process process = resource.pollFirstWaitingProcess();
+        Process process = resource.getDescriptor().pollFirstWaitingProcess();
         processManager.activateProcess(process);
     }
 }

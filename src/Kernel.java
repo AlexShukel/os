@@ -5,18 +5,20 @@ import Resources.*;
 import utils.Logger;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Kernel implements ShutdownCallback {
     private final ProcessManager processManager;
     private boolean systemRunning;
+    private final StartStop startStopProcess;
 
     public Kernel() {
         this.processManager = new ProcessManager();
         this.systemRunning = false;
+        startStopProcess = new StartStop(this, processManager);
     }
 
     public void boot() {
-        StartStop startStopProcess = new StartStop(this, processManager);
         processManager.addProcess(startStopProcess);
         systemRunning = true;
 
@@ -33,8 +35,10 @@ public class Kernel implements ShutdownCallback {
                         String input = buffer.toString();
                         buffer.setLength(0);
                         ResourceManager resourceManager = processManager.getResourceManager();
-                        Resource resource = resourceManager.getResourceByName(ResourceName.IS_VARTOTOJO_SASAJOS.name());
-                        resource.addElement(new Element(input, ElementType.STRING));
+                        Resource resource = resourceManager.getFirstOrNewResourceByDescriptor(new IS_VARTOTOJO_SASAJOS(), startStopProcess);
+                        ArrayList<Element> elements = new ArrayList<>();
+                        elements.add(new Element(input, ElementType.STRING));
+                        resource.setElements(elements);
                         resourceManager.releaseResource(resource);
                     } else {
                         buffer.append((char) ch);

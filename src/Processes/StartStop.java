@@ -1,9 +1,6 @@
 package Processes;
 
-import Resources.Resource;
-import Resources.ResourceManager;
-import Resources.ResourceName;
-import Resources.ResourceType;
+import Resources.*;
 import utils.Logger;
 
 public class StartStop extends Process {
@@ -32,8 +29,7 @@ public class StartStop extends Process {
             case 3:
                 Logger.debug("StartStop: blocking for MOS_END");
                 ResourceManager resourceManager = processManager.getResourceManager();
-                Resource resource = resourceManager.getResourceByName(ResourceName.MOS_PABAIGA.name());
-                resourceManager.requestResource(resource, this);
+                resourceManager.requestResource(new MOS_PABAIGA(), this);
                 ++executionStep;
                 break;
             case 4:
@@ -51,19 +47,10 @@ public class StartStop extends Process {
     private void initializeSystemResources() {
         Logger.debug("StartStop: Initializing system resources (Step %d)", executionStep);
         ResourceManager resourceManager = processManager.getResourceManager();
-        resourceManager.addResource(new Resource(ResourceName.IS_VARTOTOJO_SASAJOS.name(), ResourceType.STATIC, this), this);
-        resourceManager.addResource(new Resource(ResourceName.SUPERVIZORINE_ATMINTIS.name(), ResourceType.STATIC, this), this);
-        resourceManager.addResource(new Resource(ResourceName.UZDUOTIS_SUPERVIZORINEJE_ATMINTYJE.name(), ResourceType.STATIC, this), this);
-        resourceManager.addResource(new Resource(ResourceName.EILUTE_ATMINTYJE.name(), ResourceType.STATIC, this), this);
-        resourceManager.addResource(new Resource(ResourceName.UZDUOTIES_VYKDYMO_PARAMETRAI_SUPERVIZORINEJE_ATMINTYJE.name(), ResourceType.STATIC, this), this);
-        resourceManager.addResource(new Resource(ResourceName.UZDUOTIES_PROGRAMA_SUPERVIZORINEJE_ATMINTYJE.name(), ResourceType.STATIC, this), this);
-        resourceManager.addResource(new Resource(ResourceName.ISORINE_ATMINTIS.name(), ResourceType.STATIC, this), this);
-        resourceManager.addResource(new Resource(ResourceName.KANALU_IRENGINYS.name(), ResourceType.STATIC, this), this);
-        resourceManager.addResource(new Resource(ResourceName.UZDUOTIS_BUGNE.name(), ResourceType.STATIC, this), this);
-        resourceManager.addResource(new Resource(ResourceName.IS_LOADER.name(), ResourceType.STATIC, this), this);
-        resourceManager.addResource(new Resource(ResourceName.VARTOTOJO_ATMINTIS.name(), ResourceType.STATIC, this), this);
-        resourceManager.addResource(new Resource(ResourceName.NEEGZISTUOJANTIS.name(), ResourceType.STATIC, this), this);
-        resourceManager.addResource(new Resource(ResourceName.MOS_PABAIGA.name(), ResourceType.STATIC, this), this);
+        resourceManager.addResource(new Resource(new SUPERVIZORINE_ATMINTIS(), this), this);
+        resourceManager.addResource(new Resource(new ISORINE_ATMINTIS(), this), this);
+        resourceManager.addResource(new Resource(new KANALU_IRENGINYS(), this), this);
+        resourceManager.addResource(new Resource(new VARTOTOJO_ATMINTIS(), this), this);
     }
 
     private void initializeSystemProcesses() {
@@ -90,18 +77,9 @@ public class StartStop extends Process {
     private void cleanupResources() {
         Logger.debug("StartStop: Cleaning up system resources (Step %d)", executionStep);
         ResourceManager resourceManager = processManager.getResourceManager();
-        resourceManager.removeResource(resourceManager.getResourceByName(ResourceName.IS_VARTOTOJO_SASAJOS.name()));
-        resourceManager.removeResource(resourceManager.getResourceByName(ResourceName.SUPERVIZORINE_ATMINTIS.name()));
-        resourceManager.removeResource(resourceManager.getResourceByName(ResourceName.UZDUOTIS_SUPERVIZORINEJE_ATMINTYJE.name()));
-        resourceManager.removeResource(resourceManager.getResourceByName(ResourceName.EILUTE_ATMINTYJE.name()));
-        resourceManager.removeResource(resourceManager.getResourceByName(ResourceName.UZDUOTIES_VYKDYMO_PARAMETRAI_SUPERVIZORINEJE_ATMINTYJE.name()));
-        resourceManager.removeResource(resourceManager.getResourceByName(ResourceName.UZDUOTIES_PROGRAMA_SUPERVIZORINEJE_ATMINTYJE.name()));
-        resourceManager.removeResource(resourceManager.getResourceByName(ResourceName.ISORINE_ATMINTIS.name()));
-        resourceManager.removeResource(resourceManager.getResourceByName(ResourceName.KANALU_IRENGINYS.name()));
-        resourceManager.removeResource(resourceManager.getResourceByName(ResourceName.UZDUOTIS_BUGNE.name()));
-        resourceManager.removeResource(resourceManager.getResourceByName(ResourceName.IS_LOADER.name()));
-        resourceManager.removeResource(resourceManager.getResourceByName(ResourceName.VARTOTOJO_ATMINTIS.name()));
-        resourceManager.removeResource(resourceManager.getResourceByName(ResourceName.NEEGZISTUOJANTIS.name()));
-        resourceManager.removeResource(resourceManager.getResourceByName(ResourceName.MOS_PABAIGA.name()));
+        resourceManager.removeResource(resourceManager.getFirstResourceByDescriptor(new SUPERVIZORINE_ATMINTIS()));
+        resourceManager.removeResource(resourceManager.getFirstResourceByDescriptor(new ISORINE_ATMINTIS()));
+        resourceManager.removeResource(resourceManager.getFirstResourceByDescriptor(new KANALU_IRENGINYS()));
+        resourceManager.removeResource(resourceManager.getFirstResourceByDescriptor(new VARTOTOJO_ATMINTIS()));
     }
 }
