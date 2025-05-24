@@ -1,19 +1,14 @@
 package Processes;
 
-import utils.Logger;
-
 public class WhileTrue extends Process {
-    public WhileTrue(ProcessManager manager) {
-        super(manager);
+    private int executionStep = 1;
+
+    public WhileTrue(Process parent) {
+        super("WhileTrue", parent, 0);
     }
 
     @Override
-    public void Step() {
-        Logger.debug("WhileTrue process doing nothing");
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+    public void execute() {
+        // noop
     }
 }

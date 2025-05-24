@@ -42,7 +42,7 @@ public class Main {
             }
 
             if (!tokens.isEmpty()) {
-                String command = tokens.getFirst();
+                String command = tokens.get(0);
                 List<String> arguments = tokens.subList(1, tokens.size());
 
                 switch (command) {
@@ -59,7 +59,7 @@ public class Main {
                             System.err.println("Missing path argument for 'run'");
                             break;
                         }
-                        String runPath = arguments.getFirst();
+                        String runPath = arguments.get(0);
                         VirtualMachine vmRun = realMachine.loadProgram(runPath);
 
                         if (vmRun == null) {
@@ -76,7 +76,7 @@ public class Main {
                             break;
                         }
 
-                        String debugPath = arguments.getFirst();
+                        String debugPath = arguments.get(0);
                         VirtualMachine vmDebug = realMachine.loadProgram(debugPath);
 
                         if (vmDebug == null) {
