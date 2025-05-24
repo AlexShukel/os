@@ -13,8 +13,9 @@ public class ProcessDescriptor {
 
     private ProcessDescriptor parent;
     private ArrayList<ProcessDescriptor> children;
-    private ResourceList createdResources;
-    private ElementList ownedResources;
+    private ArrayList<Resource> createdResources;
+//    private ResourceList createdResources;
+//    private ElementList ownedResources;
 
     private int id;
     private int priority;
@@ -26,8 +27,7 @@ public class ProcessDescriptor {
     private Process process;
     private final int maxTicks = 10;
 
-    public ProcessDescriptor(Process process, CPU cpu, String userName, int priority)
-    {
+    public ProcessDescriptor(Process process, CPU cpu, String userName, int priority, ProcessState initialState) {
         this.cpu = cpu;
         this.priority = priority;
         this.userName = userName;
@@ -35,16 +35,16 @@ public class ProcessDescriptor {
         this.process.SetDescriptor(this);
 
         registerImage = new RegisterImage();
-        state = ProcessState.READY;
+        state = initialState;
 
         parent = null;
         children = new ArrayList<>();
+
+        this.createdResources = new ArrayList<>();
     }
 
-    public void Run()
-    {
-        if (state != ProcessState.RUN)
-        {
+    public void Run() {
+        if (state != ProcessState.RUN) {
             Logger.debug(this + " is not in " + ProcessState.RUN + " state. Aborting");
             return;
         }
@@ -53,60 +53,68 @@ public class ProcessDescriptor {
         while (!process.EndedWork() && currentTicks < maxTicks) {
             process.Step();
 
+            if (state != ProcessState.RUN) {
+                break;
+            }
+
             ++currentTicks;
         }
     }
 
-    public boolean Completed()
-    {
+    public boolean Completed() {
         return process.EndedWork();
     }
 
-    public ProcessDescriptor GetParent()
-    {
+    public ProcessDescriptor GetParent() {
         return parent;
     }
 
-    public void SetParent(ProcessDescriptor parent)
-    {
-        if (parent != this)
+    public void SetParent(ProcessDescriptor parent) {
+        if (parent != this) {
             this.parent = parent;
+
+        }
     }
 
-    public void AddChildProcess(ProcessDescriptor child)
-    {
+    public void AddChildProcess(ProcessDescriptor child) {
         children.add(child);
     }
 
-    public void RemoveChildProcess(ProcessDescriptor child)
-    {
+    public void AddChildResource(Resource resource) {
+        createdResources.add(resource);
+    }
+
+    public void RemoveChildProcess(ProcessDescriptor child) {
         children.remove(child);
     }
 
-    public ProcessState GetState()
-    {
+    public ArrayList<ProcessDescriptor> GetChildProcesses() {
+        return children;
+    }
+
+    public ProcessState GetState() {
         return state;
     }
 
-    public void SetState(ProcessState state)
-    {
-        Logger.debug("Changed " + this + " state from " + this.state + " to " + state);
+    public void SetState(ProcessState state) {
+//        Logger.debug("Changed " + this + " state from " + this.state + " to " + state);
         this.state = state;
     }
 
-    public void SetId(int id)
-    {
+    public void SetId(int id) {
         this.id = id;
     }
 
-    public int GetPriority()
-    {
+    public int GetPriority() {
         return priority;
     }
 
+    public String GetName() {
+        return userName;
+    }
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "'" + userName + "' (id: " + id + ")";
     }
 }

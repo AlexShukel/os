@@ -1,8 +1,10 @@
 package Processes;
 
+import Resources.ResourceManager;
+
 public class JobToSwap extends Process {
-    public JobToSwap(ProcessManager manager) {
-        super(manager);
+    public JobToSwap(ProcessManager processManager, ResourceManager resourceManager) {
+        super(processManager, resourceManager);
     }
 
     @Override

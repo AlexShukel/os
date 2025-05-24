@@ -1,8 +1,10 @@
 package Processes;
 
+import Resources.ResourceManager;
+
 public class JobGorvernor extends Process {
-    public JobGorvernor(ProcessManager manager) {
-        super(manager);
+    public JobGorvernor(ProcessManager processManager, ResourceManager resourceManager) {
+        super(processManager, resourceManager);
     }
 
     @Override

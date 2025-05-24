@@ -1,26 +1,20 @@
 package Processes;
 
+import Resources.ResourceManager;
+
 public abstract class Process {
     private boolean endedWork = false;
-    private ProcessDescriptor descriptor;
-    private final ProcessManager manager;
+    protected ProcessDescriptor descriptor;
 
-    public Process(ProcessManager manager)
-    {
-        this.manager = manager;
+    protected final ProcessManager processManager;
+    protected final ResourceManager resourceManager;
+
+    public Process(ProcessManager processManager, ResourceManager resourceManager) {
+        this.processManager = processManager;
+        this.resourceManager = resourceManager;
     }
 
     public abstract void Step();
-
-    public void CreateProcess(Process process, String userName, int priority)
-    {
-        manager.CreateProcess(process, descriptor, userName, priority);
-    }
-
-    public void RemoveProcess(Process process)
-    {
-        manager.RemoveProcess(process.GetDescriptor());
-    }
 
     public void CompleteWork() {
         endedWork = true;
@@ -30,18 +24,11 @@ public abstract class Process {
         return endedWork;
     }
 
-    public ProcessManager GetProcessManager()
-    {
-        return manager;
-    }
-
-    public void SetDescriptor(ProcessDescriptor descriptor)
-    {
+    public void SetDescriptor(ProcessDescriptor descriptor) {
         this.descriptor = descriptor;
     }
 
-    public ProcessDescriptor GetDescriptor()
-    {
+    public ProcessDescriptor GetDescriptor() {
         return descriptor;
     }
 }
