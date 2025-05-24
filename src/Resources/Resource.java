@@ -1,29 +1,54 @@
 package Resources;
 
-import Processes.*;
-
+import Processes.Process;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Queue;
 
 public class Resource {
-    private ProcessDescriptor creator;
-    private ElementList elements;
-
-    private ProcessList waitingProcesses;
-    private ArrayList<Integer> waitingCount;
-    private ArrayList<Integer> waitingProcPoint;
-
     private int id;
-    private ResourceList resourceList;
+    private String name;
+    private ResourceType type;
+    private Process creator;
+    private Queue<Process> waitingProcesses;
+    private ArrayList<Element> elements;
 
-    public Resource(ProcessDescriptor creator, ResourceList resourceList)
-    {
+    private static int nextId = 0;
+
+    public Resource(String name, ResourceType type, Process creator) {
+        this.id = nextId++;
+        this.name = name;
+        this.type = type;
         this.creator = creator;
-        this.resourceList = resourceList;
+        this.waitingProcesses = new ArrayDeque<>();
+        this.elements = new ArrayList<>();
+    }
 
-        elements = null;
-        waitingProcesses = null;
-        waitingCount = null;
-        waitingProcPoint = null;
-        id = 0;
+    public String getName() {
+        return name;
+    }
+
+    public ResourceType getType() {
+        return type;
+    }
+
+    public Queue<Process> getWaitingProcesses() {
+        return waitingProcesses;
+    }
+
+    public void addWaitingProcess(Process process) {
+        waitingProcesses.offer(process);
+    }
+
+    public Process pollFirstWaitingProcess() {
+        return waitingProcesses.poll();
+    }
+
+    public ArrayList<Element> getElements() {
+        return elements;
+    }
+
+    public void addElement(Element element) {
+        elements.add(element);
     }
 }
