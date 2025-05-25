@@ -1,29 +1,41 @@
 package Resources;
 
-import Processes.*;
-
+import Processes.Process;
 import java.util.ArrayList;
 
 public class Resource {
-    private ProcessDescriptor creator;
-    private ElementList elements;
-
-    private ProcessList waitingProcesses;
-    private ArrayList<Integer> waitingCount;
-    private ArrayList<Integer> waitingProcPoint;
-
     private int id;
-    private ResourceList resourceList;
 
-    public Resource(ProcessDescriptor creator, ResourceList resourceList)
-    {
+    private ResourceDescriptor descriptor;
+    private Process creator;
+    private ArrayList<Element> elements;
+
+    private static int nextId = 0;
+
+    public Resource(ResourceDescriptor descriptor, Process creator) {
+        this.id = nextId++;
         this.creator = creator;
-        this.resourceList = resourceList;
+        this.elements = new ArrayList<>();
+        this.descriptor = descriptor;
+    }
 
-        elements = null;
-        waitingProcesses = null;
-        waitingCount = null;
-        waitingProcPoint = null;
-        id = 0;
+    public ArrayList<Element> getElements() {
+        return elements;
+    }
+
+    public void setElements(ArrayList<Element> elements) {
+        this.elements = elements;
+    }
+
+    public void addElement(Element element) {
+        elements.add(element);
+    }
+
+    public String getName() {
+        return descriptor.getName();
+    }
+
+    public ResourceDescriptor getDescriptor() {
+        return descriptor;
     }
 }

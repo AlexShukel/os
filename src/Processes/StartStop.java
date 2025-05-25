@@ -1,68 +1,85 @@
 package Processes;
 
+import Resources.*;
+import utils.Logger;
+
 public class StartStop extends Process {
-    private int currentStep = 1;
+    private int executionStep = 1;
+    private final ShutdownCallback shutdownCallback;
 
-    private WhileTrue whileTrue;
-    private ReadFromInterface readFromInterface;
-    private JCL jcl;
-    private JobToSwap jobToSwap;
-    private MainProc mainProc;
-    private Loader loader;
-    private Interrupt interrupt;
-    private PrintLine printLine;
+    private final ProcessManager processManager;
 
-    public StartStop(ProcessManager manager) {
-        super(manager);
+    public StartStop(ShutdownCallback shutdownCallback, ProcessManager processManager) {
+        super("StartStop", null, 100);
+        this.shutdownCallback = shutdownCallback;
+        this.processManager = processManager;
     }
 
     @Override
-    public void Step() {
-        switch (currentStep) {
-            case 1: // Sisteminiu resursu inicializacija
+    public void execute() {
+        switch (executionStep) {
+            case 1:
+                initializeSystemResources();
+                ++executionStep;
                 break;
-            case 2: // Sisteminiu permanentiniu procesu inicializacija
-                whileTrue = new WhileTrue(GetProcessManager());
-                CreateProcess(whileTrue, "WhileTrue", 0);
-
-                readFromInterface = new ReadFromInterface(GetProcessManager());
-                CreateProcess(readFromInterface, "ReadFromInterface", 2);
-
-                jcl = new JCL(GetProcessManager());
-                CreateProcess(jcl, "JCL", 3);
-
-                jobToSwap = new JobToSwap(GetProcessManager());
-                CreateProcess(jobToSwap, "JobToSwap", 4);
-
-                mainProc = new MainProc(GetProcessManager());
-                CreateProcess(mainProc, "MainProc", 5);
-
-                loader = new Loader(GetProcessManager());
-                CreateProcess(loader, "Loader", 6);
-
-                interrupt = new Interrupt(GetProcessManager());
-                CreateProcess(interrupt, "Interrupt", 8);
-
-                printLine = new PrintLine(GetProcessManager());
-                CreateProcess(printLine, "PrintLine", 9);
+            case 2:
+                initializeSystemProcesses();
+                ++executionStep;
                 break;
-            case 3: // Blokavimasis laukiant "Mos pabaiga" resurso
+            case 3:
+                Logger.debug("StartStop: blocking for MOS_END");
+                ResourceManager resourceManager = processManager.getResourceManager();
+                resourceManager.requestResource(new MOS_PABAIGA(), this);
+                ++executionStep;
                 break;
-            case 4: // Sisteminiu procesu naikinimas
-                RemoveProcess(whileTrue);
-                RemoveProcess(readFromInterface);
-                RemoveProcess(jcl);
-                RemoveProcess(jobToSwap);
-                RemoveProcess(mainProc);
-                RemoveProcess(loader);
-                RemoveProcess(interrupt);
-                RemoveProcess(printLine);
+            case 4:
+                cleanupProcesses();
+                ++executionStep;
                 break;
-            case 5: // Sisteminiu resursu naikinimas
-                CompleteWork();
+            case 5:
+                cleanupResources();
+                finish();
+                shutdownCallback.requestShutdown();
                 break;
         }
+    }
 
-        ++currentStep;
+    private void initializeSystemResources() {
+        Logger.debug("StartStop: Initializing system resources (Step %d)", executionStep);
+        ResourceManager resourceManager = processManager.getResourceManager();
+        resourceManager.addResource(new Resource(new SUPERVIZORINE_ATMINTIS(), this), this);
+        resourceManager.addResource(new Resource(new ISORINE_ATMINTIS(), this), this);
+        resourceManager.addResource(new Resource(new KANALU_IRENGINYS(), this), this);
+        resourceManager.addResource(new Resource(new VARTOTOJO_ATMINTIS(), this), this);
+    }
+
+    private void initializeSystemProcesses() {
+        Logger.debug("StartStop: Initializing system processes (Step %d)", executionStep);
+        processManager.addProcess(new WhileTrue(this));
+        processManager.addProcess(new ReadFromInterface(this, processManager.getResourceManager()));
+        processManager.addProcess(new JCL(this));
+        processManager.addProcess(new JobToSwap(this));
+        processManager.addProcess(new MainProc(this));
+        processManager.addProcess(new Loader(this));
+        processManager.addProcess(new Interrupt(this));
+        processManager.addProcess(new PrintLine(this, processManager.getResourceManager()));
+    }
+
+    private void cleanupProcesses() {
+        Logger.debug("StartStop: Cleaning up %d child processes (Step %d)", children.size(), executionStep);
+        for (Process child : children) {
+            Logger.debug("StartStop: Destroying process %s", child.getName());
+        }
+        children.clear();
+        Logger.debug("StartStop: Process cleanup completed");
+    }
+
+    private void cleanupResources() {
+        Logger.debug("StartStop: Cleaning up system resources (Step %d)", executionStep);
+        ResourceManager resourceManager = processManager.getResourceManager();
+        resourceManager.removeResource(resourceManager.getFirstResourceByDescriptor(new SUPERVIZORINE_ATMINTIS()));
+        resourceManager.removeResource(resourceManager.getFirstResourceByDescriptor(new ISORINE_ATMINTIS()));
+        resourceManager.removeResource(resourceManager.getFirstResourceByDescriptor(new KANALU_IRENGINYS()));
+        resourceManager.removeResource(resourceManager.getFirstResourceByDescriptor(new VARTOTOJO_ATMINTIS()));
     }
 }
